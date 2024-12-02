@@ -1,0 +1,1 @@
+# php-tidal-api
