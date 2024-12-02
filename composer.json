@@ -1,0 +1,36 @@
+{
+  "name": "gerenuk/php-tidal-api",
+  "description": "A PHP wrapper for Tidal's Api.",
+  "type": "library",
+  "license": "MIT",
+  "keywords": [
+    "tidal",
+    "gerenuk",
+    "tidal-api"
+  ],
+  "homepage": "https://github.com/Gerenuk-LTD/php-tidal-api",
+  "authors": [
+    {
+      "name": "Kieran Proctor",
+      "email": "kieran.proctor@geren.uk"
+    }
+  ],
+  "require": {
+    "php": "^8.3",
+    "ext-curl": "*"
+  },
+  "require-dev": {
+    "php-coveralls/php-coveralls": "^2.5",
+    "php-mock/php-mock-phpunit": "^2.7",
+    "phpunit/phpunit": "^10.2",
+    "squizlabs/php_codesniffer": "^3.0"
+  },
+  "autoload": {
+    "psr-4": {
+      "TidalApi\\": "src/"
+    }
+  },
+  "scripts": {
+    "test": "phpcs src -v && phpunit"
+  }
+}
