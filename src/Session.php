@@ -19,10 +19,10 @@ class Session
      * Constructor
      * Set up client credentials.
      *
-     * @param string $clientId The client ID.
-     * @param string $clientSecret Optional. The client secret.
-     * @param string $redirectUri Optional. The redirect URI.
-     * @param Request $request Optional. The Request object to use.
+     * @param  string  $clientId  The client ID.
+     * @param  string  $clientSecret  Optional. The client secret.
+     * @param  string  $redirectUri  Optional. The redirect URI.
+     * @param ?Request  $request  Optional. The Request object to use.
      */
     public function __construct(
         string $clientId,
@@ -106,7 +106,7 @@ class Session
             'state' => $options['state'] ?? null,
         ];
 
-        return Request::ACCOUNT_URL . '/authorize?' . http_build_query($parameters, '', '&');
+        return Request::LOGIN_URL . '/authorize?' . http_build_query($parameters, '', '&');
     }
 
     /**
@@ -182,9 +182,11 @@ class Session
     /**
      * Refresh an access token.
      *
-     * @param string $refreshToken Optional. The refresh token to use.
+     * @param  string|null  $refreshToken  Optional. The refresh token to use.
      *
      * @return bool Whether the access token was successfully refreshed.
+     * @throws TidalApiAuthException
+     * @throws TidalApiException
      */
     public function refreshAccessToken(?string $refreshToken = null): bool
     {
@@ -202,7 +204,7 @@ class Session
             ];
         }
 
-        ['body' => $response] = $this->request->account('POST', '/api/token', $parameters, $headers);
+        ['body' => $response] = $this->request->auth('POST', '/v1/oauth2/token', $parameters, $headers);
 
         if (isset($response->access_token)) {
             $this->accessToken = $response->access_token;
@@ -239,7 +241,7 @@ class Session
             'code_verifier' => $codeVerifier,
         ];
 
-        ['body' => $response] = $this->request->account('POST', '/api/token', $parameters, []);
+        ['body' => $response] = $this->request->auth('POST', '/v1/oauth2/token', $parameters, []);
 
         if (isset($response->refresh_token) && isset($response->access_token)) {
             $this->refreshToken = $response->refresh_token;
@@ -270,7 +272,7 @@ class Session
             'Authorization' => 'Basic ' . $payload,
         ];
 
-        ['body' => $response] = $this->request->account('POST', '/api/token', $parameters, $headers);
+        ['body' => $response] = $this->request->auth('POST', '/v1/oauth2/token', $parameters, $headers);
 
         if (isset($response->access_token)) {
             $this->accessToken = $response->access_token;

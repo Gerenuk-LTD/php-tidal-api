@@ -6,8 +6,9 @@ namespace TidalApi;
 
 class Request
 {
-    public const string ACCOUNT_URL = 'https://login.tidal.com';
-    public const string API_URL = 'https://api.spotify.com';
+    public const string LOGIN_URL = 'https://login.tidal.com';
+    public const string AUTH_URL = 'https://auth.tidal.com';
+    public const string API_URL = 'https://openapi.tidal.com';
 
     protected array $lastResponse = [];
     protected array $options = [
@@ -85,7 +86,7 @@ class Request
     }
 
     /**
-     * Make a request to the "account" endpoint.
+     * Make a request to the "login" endpoint.
      *
      * @param string $method The HTTP method to use.
      * @param string $uri The URI to request.
@@ -101,9 +102,31 @@ class Request
      * - int status HTTP status code.
      * - string url The requested URL.
      */
-    public function account(string $method, string $uri, string|array $parameters = [], array $headers = []): array
+    public function login(string $method, string $uri, string|array $parameters = [], array $headers = []): array
     {
-        return $this->send($method, self::ACCOUNT_URL . $uri, $parameters, $headers);
+        return $this->send($method, self::LOGIN_URL . $uri, $parameters, $headers);
+    }
+
+    /**
+     * Make a request to the "auth" endpoint.
+     *
+     * @param string $method The HTTP method to use.
+     * @param string $uri The URI to request.
+     * @param string|array $parameters Optional. Query string parameters or HTTP body, depending on $method.
+     * @param array $headers Optional. HTTP headers.
+     *
+     * @throws TidalApiException
+     * @throws TidalApiAuthException
+     *
+     * @return array Response data.
+     * - array|object body The response body. Type is controlled by the `return_assoc` option.
+     * - array headers Response headers.
+     * - int status HTTP status code.
+     * - string url The requested URL.
+     */
+    public function auth(string $method, string $uri, string|array $parameters = [], array $headers = []): array
+    {
+        return $this->send($method, self::AUTH_URL . $uri, $parameters, $headers);
     }
 
     /**
@@ -129,7 +152,7 @@ class Request
     }
 
     /**
-     * Get the latest full response from the Spotify API.
+     * Get the latest full response from the Tidal Api.
      *
      * @return array Response data.
      * - array|object body The response body. Type is controlled by the `return_assoc` option.
@@ -143,7 +166,7 @@ class Request
     }
 
     /**
-     * Make a request to Spotify.
+     * Make a request to Tidal.
      * You'll probably want to use one of the convenience methods instead.
      *
      * @param string $method The HTTP method to use.
@@ -171,7 +194,7 @@ class Request
         }
 
         $options = [
-            CURLOPT_CAINFO => __DIR__ . '/cacert.pem',
+//            CURLOPT_CAINFO => __DIR__ . '/cacert.pem',
             CURLOPT_ENCODING => '',
             CURLOPT_HEADER => true,
             CURLOPT_HTTPHEADER => [],
