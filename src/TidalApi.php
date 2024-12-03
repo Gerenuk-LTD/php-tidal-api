@@ -163,6 +163,98 @@ class TidalApi
     }
 
     /**
+     * Get an album.
+     * https://developer.tidal.com/apiref?spec=catalogue-v2&ref=get-album-v2&at=THIRD_PARTY
+     *
+     * @param string $albumId Id of the album.
+     * @param string $countryCode ISO 3166-1 alpha-2 country code.
+     * @param array|object $options Optional. Options for the album.
+     * - array include Optional. Customise related resource to be returned.
+     *
+     * @throws TidalApiException
+     * @throws TidalApiAuthException
+     *
+     * @return array|object The requested album. Type is controlled by the `return_assoc` option.
+     */
+    public function getAlbum(string $albumId, string $countryCode, array|object $options = []): array|object
+    {
+        $uri = '/v2/albums/' . $albumId;
+
+        $options = array_merge([
+            'countryCode' => $countryCode,
+        ], (array) $options);
+
+        $this->lastResponse = $this->sendRequest('GET', $uri, $options);
+
+        return $this->lastResponse['body'];
+    }
+
+    public function getAlbumRelationship(string $albumId, string $countryCode, string $relationship, array|object $options = []): array|object
+    {
+        $uri = '/v2/albums/' . $albumId . '/relationships/' . $relationship;
+
+        $options = array_merge([
+            'countryCode' => $countryCode,
+        ], (array) $options);
+
+        $this->lastResponse = $this->sendRequest('GET', $uri, $options);
+
+        return $this->lastResponse['body'];
+    }
+
+    public function getAlbumRelationshipArtists(string $albumId, string $countryCode, array|object $options = []): array
+    {
+        $uri = '/v2/albums/' . $albumId . '/relationships/artists';
+
+        $options = array_merge([
+            'countryCode' => $countryCode,
+        ], (array) $options);
+
+        $this->lastResponse = $this->sendRequest('GET', $uri, $options);
+
+        return $this->lastResponse['body'];
+    }
+
+    public function getAlbumRelationshipItems(string $albumId, string $countryCode, array|object $options = []): array
+    {
+        $uri = '/v2/albums/' . $albumId . '/relationships/items';
+
+        $options = array_merge([
+            'countryCode' => $countryCode,
+        ], (array) $options);
+
+        $this->lastResponse = $this->sendRequest('GET', $uri, $options);
+
+        return $this->lastResponse['body'];
+    }
+
+    public function getAlbumRelationshipProviders(string $albumId, string $countryCode, array|object $options = []): array
+    {
+        $uri = '/v2/albums/' . $albumId . '/relationships/providers';
+
+        $options = array_merge([
+            'countryCode' => $countryCode,
+        ], (array) $options);
+
+        $this->lastResponse = $this->sendRequest('GET', $uri, $options);
+
+        return $this->lastResponse['body'];
+    }
+
+    public function getAlbumRelationshipSimilarAlbums(string $albumId, string $countryCode, array|object $options = []): array
+    {
+        $uri = '/v2/albums/' . $albumId . '/relationships/similarAlbums';
+
+        $options = array_merge([
+            'countryCode' => $countryCode,
+        ], (array) $options);
+
+        $this->lastResponse = $this->sendRequest('GET', $uri, $options);
+
+        return $this->lastResponse['body'];
+    }
+
+    /**
      * Get the currently authenticated user.
      * https://developer.tidal.com/apiref?spec=user-v2&ref=get-me-v2&at=THIRD_PARTY
      *
