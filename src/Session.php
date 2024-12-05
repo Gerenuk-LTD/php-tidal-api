@@ -35,13 +35,13 @@ class Session
         string $clientId,
         string $clientSecret = '',
         string $redirectUri = '',
-        ?Request $request = null
+        ?Request $request = null,
     ) {
         $this->setClientId($clientId);
         $this->setClientSecret($clientSecret);
         $this->setRedirectUri($redirectUri);
 
-        $this->request = $request ?? new Request;
+        $this->request = $request ?? new Request();
     }
 
     /**
@@ -82,7 +82,7 @@ class Session
     {
         // Length will be doubled when converting to hex
         return bin2hex(
-            random_bytes($length / 2)
+            random_bytes($length / 2),
         );
     }
 
@@ -109,7 +109,7 @@ class Session
             'state' => $options['state'] ?? null,
         ];
 
-        return Request::LOGIN_URL.'/authorize?'.http_build_query($parameters, '', '&');
+        return Request::LOGIN_URL . '/authorize?' . http_build_query($parameters, '', '&');
     }
 
     /**
@@ -238,10 +238,10 @@ class Session
 
         $headers = [];
         if ($this->getClientSecret()) {
-            $payload = base64_encode($this->getClientId().':'.$this->getClientSecret());
+            $payload = base64_encode($this->getClientId() . ':' . $this->getClientSecret());
 
             $headers = [
-                'Authorization' => 'Basic '.$payload,
+                'Authorization' => 'Basic ' . $payload,
             ];
         }
 
@@ -324,14 +324,14 @@ class Session
      */
     public function requestCredentialsToken(): bool
     {
-        $payload = base64_encode($this->getClientId().':'.$this->getClientSecret());
+        $payload = base64_encode($this->getClientId() . ':' . $this->getClientSecret());
 
         $parameters = [
             'grant_type' => 'client_credentials',
         ];
 
         $headers = [
-            'Authorization' => 'Basic '.$payload,
+            'Authorization' => 'Basic ' . $payload,
         ];
 
         ['body' => $response] = $this->request->auth('POST', '/v1/oauth2/token', $parameters, $headers);

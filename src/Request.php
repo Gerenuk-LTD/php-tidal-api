@@ -37,7 +37,7 @@ class Request
      */
     public function login(string $method, string $uri, string|array $parameters = [], array $headers = []): array
     {
-        return $this->send($method, self::LOGIN_URL.$uri, $parameters, $headers);
+        return $this->send($method, self::LOGIN_URL . $uri, $parameters, $headers);
     }
 
     /**
@@ -83,7 +83,7 @@ class Request
         $method = strtoupper($method);
 
         switch ($method) {
-            case 'DELETE': // No break
+            case 'DELETE':
             case 'PUT':
                 $options[CURLOPT_CUSTOMREQUEST] = $method;
                 $options[CURLOPT_POSTFIELDS] = $parameters;
@@ -98,7 +98,7 @@ class Request
                 $options[CURLOPT_CUSTOMREQUEST] = $method;
 
                 if ($parameters) {
-                    $options[CURLOPT_URL] .= '/?'.$parameters;
+                    $options[CURLOPT_URL] .= '/?' . $parameters;
                 }
 
                 break;
@@ -115,7 +115,7 @@ class Request
             $errno = curl_errno($ch);
             curl_close($ch);
 
-            throw new TidalApiException('cURL transport error: '.$errno.' '.$error);
+            throw new TidalApiException('cURL transport error: ' . $errno . ' ' . $error);
         }
 
         [$headers, $body] = $this->splitResponse($response);
@@ -253,7 +253,7 @@ class Request
      */
     public function auth(string $method, string $uri, string|array $parameters = [], array $headers = []): array
     {
-        return $this->send($method, self::AUTH_URL.$uri, $parameters, $headers);
+        return $this->send($method, self::AUTH_URL . $uri, $parameters, $headers);
     }
 
     /**
@@ -274,7 +274,7 @@ class Request
      */
     public function api(string $method, string $uri, string|array $parameters = [], array $headers = []): array
     {
-        return $this->send($method, self::API_URL.$uri, $parameters, $headers);
+        return $this->send($method, self::API_URL . $uri, $parameters, $headers);
     }
 
     /**

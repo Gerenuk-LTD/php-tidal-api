@@ -33,7 +33,7 @@ class TidalApi
         $this->setOptions($options);
         $this->setSession($session);
 
-        $this->request = $request ?? new Request;
+        $this->request = $request ?? new Request();
     }
 
     /**
@@ -87,7 +87,7 @@ class TidalApi
      */
     public function getAlbum(string $albumId, string $countryCode, array|object $options = []): array|object
     {
-        $uri = '/v2/albums/'.$albumId;
+        $uri = '/v2/albums/' . $albumId;
 
         $options = array_merge([
             'countryCode' => $countryCode,
@@ -118,7 +118,7 @@ class TidalApi
         string $method,
         string $uri,
         string|array $parameters = [],
-        array $headers = []
+        array $headers = [],
     ): array {
         $this->request->setOptions([
             'return_assoc' => $this->options['return_assoc'],
@@ -161,7 +161,7 @@ class TidalApi
 
         if ($accessToken) {
             $headers = array_merge($headers, [
-                'Authorization' => 'Bearer '.$accessToken,
+                'Authorization' => 'Bearer ' . $accessToken,
             ]);
         }
 
@@ -183,7 +183,7 @@ class TidalApi
     public function getAlbumRelationshipArtists(
         string $albumId,
         string $countryCode,
-        array|object $options = []
+        array|object $options = [],
     ): array|object {
         return $this->getAlbumRelationship($albumId, $countryCode, 'artists', $options);
     }
@@ -204,9 +204,9 @@ class TidalApi
         string $albumId,
         string $countryCode,
         string $relationship,
-        array|object $options = []
+        array|object $options = [],
     ): array|object {
-        $uri = '/v2/albums/'.$albumId.'/relationships/'.$relationship;
+        $uri = '/v2/albums/' . $albumId . '/relationships/' . $relationship;
 
         $options = array_merge([
             'countryCode' => $countryCode,
@@ -232,7 +232,7 @@ class TidalApi
     public function getAlbumRelationshipItems(
         string $albumId,
         string $countryCode,
-        array|object $options = []
+        array|object $options = [],
     ): array|object {
         return $this->getAlbumRelationship($albumId, $countryCode, 'items', $options);
     }
@@ -252,7 +252,7 @@ class TidalApi
     public function getAlbumRelationshipProviders(
         string $albumId,
         string $countryCode,
-        array|object $options = []
+        array|object $options = [],
     ): array|object {
         return $this->getAlbumRelationship($albumId, $countryCode, 'providers', $options);
     }
@@ -272,7 +272,7 @@ class TidalApi
     public function getAlbumRelationshipSimilarAlbums(
         string $albumId,
         string $countryCode,
-        array|object $options = []
+        array|object $options = [],
     ): array|object {
         return $this->getAlbumRelationship($albumId, $countryCode, 'similarAlbums', $options);
     }
@@ -292,7 +292,7 @@ class TidalApi
      */
     public function getArtist(string $artistId, string $countryCode, array|object $options = []): array|object
     {
-        $uri = '/v2/artists/'.$artistId;
+        $uri = '/v2/artists/' . $artistId;
 
         $options = array_merge([
             'countryCode' => $countryCode,
@@ -318,7 +318,7 @@ class TidalApi
     public function getArtistRelationshipAlbums(
         string $artistId,
         string $countryCode,
-        array|object $options = []
+        array|object $options = [],
     ): array|object {
         return $this->getArtistRelationship($artistId, $countryCode, 'albums', $options);
     }
@@ -339,9 +339,9 @@ class TidalApi
         string $artistId,
         string $countryCode,
         string $relationship,
-        array|object $options = []
+        array|object $options = [],
     ): array|object {
-        $uri = '/v2/artists/'.$artistId.'/relationships/'.$relationship;
+        $uri = '/v2/artists/' . $artistId . '/relationships/' . $relationship;
 
         $options = array_merge([
             'countryCode' => $countryCode,
@@ -367,7 +367,7 @@ class TidalApi
     public function getArtistRelationshipRadio(
         string $artistId,
         string $countryCode,
-        array|object $options = []
+        array|object $options = [],
     ): array|object {
         return $this->getArtistRelationship($artistId, $countryCode, 'radio', $options);
     }
@@ -387,7 +387,7 @@ class TidalApi
     public function getArtistRelationshipSimilarArtists(
         string $artistId,
         string $countryCode,
-        array|object $options = []
+        array|object $options = [],
     ): array|object {
         return $this->getArtistRelationship($artistId, $countryCode, 'similarArtists', $options);
     }
@@ -407,7 +407,7 @@ class TidalApi
     public function getArtistRelationshipTrackProviders(
         string $artistId,
         string $countryCode,
-        array|object $options = []
+        array|object $options = [],
     ): array|object {
         return $this->getArtistRelationship($artistId, $countryCode, 'providers', $options);
     }
@@ -427,7 +427,7 @@ class TidalApi
     public function getArtistRelationshipTracks(
         string $artistId,
         string $countryCode,
-        array|object $options = []
+        array|object $options = [],
     ): array|object {
         return $this->getArtistRelationship($artistId, $countryCode, 'tracks', $options);
     }
@@ -447,7 +447,7 @@ class TidalApi
     public function getArtistRelationshipVideos(
         string $artistId,
         string $countryCode,
-        array|object $options = []
+        array|object $options = [],
     ): array|object {
         return $this->getArtistRelationship($artistId, $countryCode, 'videos', $options);
     }
@@ -466,7 +466,7 @@ class TidalApi
      */
     public function getTrack(string $trackId, string $countryCode, array|object $options = []): array|object
     {
-        $uri = '/v2/tracks/'.$trackId;
+        $uri = '/v2/tracks/' . $trackId;
 
         $options = array_merge([
             'countryCode' => $countryCode,
@@ -492,7 +492,7 @@ class TidalApi
     public function getTrackRelationshipAlbums(
         string $trackId,
         string $countryCode,
-        array|object $options = []
+        array|object $options = [],
     ): array|object {
         return $this->getTrackRelationship($trackId, $countryCode, 'albums', $options);
     }
@@ -513,9 +513,9 @@ class TidalApi
         string $trackId,
         string $countryCode,
         string $relationship,
-        array|object $options = []
+        array|object $options = [],
     ): array|object {
-        $uri = '/v2/tracks/'.$trackId.'/relationships/'.$relationship;
+        $uri = '/v2/tracks/' . $trackId . '/relationships/' . $relationship;
 
         $options = array_merge([
             'countryCode' => $countryCode,
@@ -541,7 +541,7 @@ class TidalApi
     public function getTrackRelationshipArtists(
         string $trackId,
         string $countryCode,
-        array|object $options = []
+        array|object $options = [],
     ): array|object {
         return $this->getTrackRelationship($trackId, $countryCode, 'artists', $options);
     }
@@ -561,7 +561,7 @@ class TidalApi
     public function getTrackRelationshipProviders(
         string $trackId,
         string $countryCode,
-        array|object $options = []
+        array|object $options = [],
     ): array|object {
         return $this->getTrackRelationship($trackId, $countryCode, 'providers', $options);
     }
@@ -581,7 +581,7 @@ class TidalApi
     public function getTrackRelationshipRadio(
         string $trackId,
         string $countryCode,
-        array|object $options = []
+        array|object $options = [],
     ): array|object {
         return $this->getTrackRelationship($trackId, $countryCode, 'radio', $options);
     }
@@ -601,7 +601,7 @@ class TidalApi
     public function getTrackRelationshipSimilarTracks(
         string $trackId,
         string $countryCode,
-        array|object $options = []
+        array|object $options = [],
     ): array|object {
         return $this->getTrackRelationship($trackId, $countryCode, 'similarTracks', $options);
     }
@@ -620,7 +620,7 @@ class TidalApi
      */
     public function getVideo(string $videoId, string $countryCode, array|object $options = []): array|object
     {
-        $uri = '/v2/videos/'.$videoId;
+        $uri = '/v2/videos/' . $videoId;
 
         $options = array_merge([
             'countryCode' => $countryCode,
@@ -646,7 +646,7 @@ class TidalApi
     public function getVideoRelationshipAlbums(
         string $videoId,
         string $countryCode,
-        array|object $options = []
+        array|object $options = [],
     ): array|object {
         return $this->getVideoRelationship($videoId, $countryCode, 'albums', $options);
     }
@@ -667,9 +667,9 @@ class TidalApi
         string $videoId,
         string $countryCode,
         string $relationship,
-        array|object $options = []
+        array|object $options = [],
     ): array|object {
-        $uri = '/v2/videos/'.$videoId.'/relationships/'.$relationship;
+        $uri = '/v2/videos/' . $videoId . '/relationships/' . $relationship;
 
         $options = array_merge([
             'countryCode' => $countryCode,
@@ -695,7 +695,7 @@ class TidalApi
     public function getVideoRelationshipArtists(
         string $videoId,
         string $countryCode,
-        array|object $options = []
+        array|object $options = [],
     ): array|object {
         return $this->getVideoRelationship($videoId, $countryCode, 'artists', $options);
     }
@@ -715,7 +715,7 @@ class TidalApi
     public function getVideoRelationshipProviders(
         string $videoId,
         string $countryCode,
-        array|object $options = []
+        array|object $options = [],
     ): array|object {
         return $this->getVideoRelationship($videoId, $countryCode, 'providers', $options);
     }
@@ -733,7 +733,7 @@ class TidalApi
      */
     public function getProvider(string $providerId, array|object $options = []): array|object
     {
-        $uri = '/v2/providers/'.$providerId;
+        $uri = '/v2/providers/' . $providerId;
 
         $this->lastResponse = $this->sendRequest('GET', $uri, $options);
 
@@ -772,7 +772,7 @@ class TidalApi
      */
     public function getUser(string $userId, array|object $options = []): array|object
     {
-        $uri = '/v2/users/'.$userId;
+        $uri = '/v2/users/' . $userId;
 
         $this->lastResponse = $this->sendRequest('GET', $uri, $options);
 
@@ -808,7 +808,7 @@ class TidalApi
      */
     public function getUserRelationship(string $userId, string $relationship, array|object $options = []): array|object
     {
-        $uri = '/v2/users/'.$userId.'/relationships/'.$relationship;
+        $uri = '/v2/users/' . $userId . '/relationships/' . $relationship;
 
         $this->lastResponse = $this->sendRequest('GET', $uri, $options);
 
@@ -830,7 +830,7 @@ class TidalApi
     public function getUserRelationshipPublicProfile(
         string $userId,
         string $locale,
-        array|object $options = []
+        array|object $options = [],
     ): array|object {
         $options = array_merge([
             'locale' => $locale,
