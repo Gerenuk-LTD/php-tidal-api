@@ -8,13 +8,13 @@ namespace TidalApi;
 class TidalApiAuthException extends TidalApiException
 {
     public const string INVALID_CLIENT = 'Invalid client';
+
     public const string INVALID_CLIENT_SECRET = 'Invalid client secret';
+
     public const string INVALID_REFRESH_TOKEN = 'Invalid refresh token';
 
     /**
      * Returns whether the exception was thrown because of invalid credentials.
-     *
-     * @return bool
      */
     public function hasInvalidCredentials(): bool
     {
@@ -26,8 +26,6 @@ class TidalApiAuthException extends TidalApiException
 
     /**
      * Returns whether the exception was thrown because of an invalid refresh token.
-     *
-     * @return bool
      */
     public function hasInvalidRefreshToken(): bool
     {

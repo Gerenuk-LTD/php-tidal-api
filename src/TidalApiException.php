@@ -4,22 +4,21 @@ declare(strict_types=1);
 
 namespace TidalApi;
 
-class TidalApiException extends \Exception
+use Exception;
+
+class TidalApiException extends Exception
 {
     public const string TOKEN_EXPIRED = 'The access token expired';
+
     public const int RATE_LIMIT_STATUS = 429;
 
     /**
      * The reason string from a player request's error object.
-     *
-     * @var string
      */
     private string $reason = '';
 
     /**
      * Returns the reason string from a player request's error object.
-     *
-     * @return string
      */
     public function getReason(): string
     {
@@ -27,9 +26,15 @@ class TidalApiException extends \Exception
     }
 
     /**
+     * Set the reason string.
+     */
+    public function setReason(string $reason): void
+    {
+        $this->reason = $reason;
+    }
+
+    /**
      * Returns whether the exception was thrown because of an expired access token.
-     *
-     * @return bool
      */
     public function hasExpiredToken(): bool
     {
@@ -38,23 +43,9 @@ class TidalApiException extends \Exception
 
     /**
      * Returns whether the exception was thrown because of rate limiting.
-     *
-     * @return bool
      */
     public function isRateLimited(): bool
     {
         return $this->getCode() === self::RATE_LIMIT_STATUS;
-    }
-
-    /**
-     * Set the reason string.
-     *
-     * @param string $reason
-     *
-     * @return void
-     */
-    public function setReason(string $reason): void
-    {
-        $this->reason = $reason;
     }
 }

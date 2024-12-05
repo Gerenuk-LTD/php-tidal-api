@@ -7,12 +7,19 @@ namespace TidalApi;
 class Session
 {
     protected string $accessToken = '';
+
     protected string $clientId = '';
+
     protected string $clientSecret = '';
+
     protected int $expirationTime = 0;
+
     protected string $redirectUri = '';
+
     protected string $refreshToken = '';
+
     protected string $scope = '';
+
     protected ?Request $request = null;
 
     /**
@@ -22,7 +29,7 @@ class Session
      * @param  string  $clientId  The client ID.
      * @param  string  $clientSecret  Optional. The client secret.
      * @param  string  $redirectUri  Optional. The redirect URI.
-     * @param ?Request  $request  Optional. The Request object to use.
+     * @param  ?Request  $request  Optional. The Request object to use.
      */
     public function __construct(
         string $clientId,
@@ -34,15 +41,14 @@ class Session
         $this->setClientSecret($clientSecret);
         $this->setRedirectUri($redirectUri);
 
-        $this->request = $request ?? new Request();
+        $this->request = $request ?? new Request;
     }
 
     /**
      * Generate a code challenge from a code verifier for use with the PKCE flow.
      *
-     * @param string $codeVerifier The code verifier to create a challenge from.
-     * @param string $hashAlgo Optional. The hash algorithm to use. Defaults to "sha256".
-     *
+     * @param  string  $codeVerifier  The code verifier to create a challenge from.
+     * @param  string  $hashAlgo  Optional. The hash algorithm to use. Defaults to "sha256".
      * @return string The code challenge.
      */
     public function generateCodeChallenge(string $codeVerifier, string $hashAlgo = 'sha256'): string
@@ -58,8 +64,7 @@ class Session
     /**
      * Generate a code verifier for use with the PKCE flow.
      *
-     * @param int $length Optional. Code verifier length. Must be between 43 and 128 characters long, default is 128.
-     *
+     * @param  int  $length  Optional. Code verifier length. Must be between 43 and 128 characters long, default is 128.
      * @return string A code verifier string.
      */
     public function generateCodeVerifier(int $length = 128): string
@@ -70,8 +75,7 @@ class Session
     /**
      * Generate a random state value.
      *
-     * @param int $length Optional. Length of the state. Default is 16 characters.
-     *
+     * @param  int  $length  Optional. Length of the state. Default is 16 characters.
      * @return string A random state value.
      */
     public function generateState(int $length = 16): string
@@ -85,11 +89,10 @@ class Session
     /**
      * Get the authorization URL.
      *
-     * @param array|object $options Optional. Options for the authorization URL.
-     * - string code_challenge. A PKCE code challenge.
-     * - array scope Optional. Scope(s) to request from the user.
-     * - string state Optional. A CSRF token.
-     *
+     * @param  array|object  $options  Optional. Options for the authorization URL.
+     *                                 - string code_challenge. A PKCE code challenge.
+     *                                 - array scope Optional. Scope(s) to request from the user.
+     *                                 - string state Optional. A CSRF token.
      * @return string The authorization URL.
      */
     public function getAuthorizeUrl(array|object $options = []): string
@@ -106,17 +109,7 @@ class Session
             'state' => $options['state'] ?? null,
         ];
 
-        return Request::LOGIN_URL . '/authorize?' . http_build_query($parameters, '', '&');
-    }
-
-    /**
-     * Get the access token.
-     *
-     * @return string The access token.
-     */
-    public function getAccessToken(): string
-    {
-        return $this->accessToken;
+        return Request::LOGIN_URL.'/authorize?'.http_build_query($parameters, '', '&');
     }
 
     /**
@@ -130,23 +123,15 @@ class Session
     }
 
     /**
-     * Get the client secret.
+     * Set the client ID.
      *
-     * @return string The client secret.
+     * @param  string  $clientId  The client ID.
      */
-    public function getClientSecret(): string
+    public function setClientId(string $clientId): self
     {
-        return $this->clientSecret;
-    }
+        $this->clientId = $clientId;
 
-    /**
-     * Get the access token expiration time.
-     *
-     * @return int A Unix timestamp indicating the token expiration time.
-     */
-    public function getTokenExpiration(): int
-    {
-        return $this->expirationTime;
+        return $this;
     }
 
     /**
@@ -160,6 +145,50 @@ class Session
     }
 
     /**
+     * Set the client's redirect URI.
+     *
+     * @param  string  $redirectUri  The redirect URI.
+     */
+    public function setRedirectUri(string $redirectUri): self
+    {
+        $this->redirectUri = $redirectUri;
+
+        return $this;
+    }
+
+    /**
+     * Get the access token.
+     *
+     * @return string The access token.
+     */
+    public function getAccessToken(): string
+    {
+        return $this->accessToken;
+    }
+
+    /**
+     * Set the access token.
+     *
+     * @param  string  $accessToken  The access token
+     */
+    public function setAccessToken(string $accessToken): self
+    {
+        $this->accessToken = $accessToken;
+
+        return $this;
+    }
+
+    /**
+     * Get the access token expiration time.
+     *
+     * @return int A Unix timestamp indicating the token expiration time.
+     */
+    public function getTokenExpiration(): int
+    {
+        return $this->expirationTime;
+    }
+
+    /**
      * Get the refresh token.
      *
      * @return string The refresh token.
@@ -167,6 +196,18 @@ class Session
     public function getRefreshToken(): string
     {
         return $this->refreshToken;
+    }
+
+    /**
+     * Set the session's refresh token.
+     *
+     * @param  string  $refreshToken  The refresh token.
+     */
+    public function setRefreshToken(string $refreshToken): self
+    {
+        $this->refreshToken = $refreshToken;
+
+        return $this;
     }
 
     /**
@@ -183,8 +224,8 @@ class Session
      * Refresh an access token.
      *
      * @param  string|null  $refreshToken  Optional. The refresh token to use.
-     *
      * @return bool Whether the access token was successfully refreshed.
+     *
      * @throws TidalApiAuthException
      * @throws TidalApiException
      */
@@ -197,10 +238,10 @@ class Session
 
         $headers = [];
         if ($this->getClientSecret()) {
-            $payload = base64_encode($this->getClientId() . ':' . $this->getClientSecret());
+            $payload = base64_encode($this->getClientId().':'.$this->getClientSecret());
 
             $headers = [
-                'Authorization' => 'Basic ' . $payload,
+                'Authorization' => 'Basic '.$payload,
             ];
         }
 
@@ -224,11 +265,32 @@ class Session
     }
 
     /**
+     * Get the client secret.
+     *
+     * @return string The client secret.
+     */
+    public function getClientSecret(): string
+    {
+        return $this->clientSecret;
+    }
+
+    /**
+     * Set the client secret.
+     *
+     * @param  string  $clientSecret  The client secret.
+     */
+    public function setClientSecret(string $clientSecret): self
+    {
+        $this->clientSecret = $clientSecret;
+
+        return $this;
+    }
+
+    /**
      * Request an access token given an authorization code.
      *
-     * @param string $authorizationCode The authorization code from Spotify.
-     * @param string $codeVerifier Optional. A previously generated code verifier. Will assume a PKCE flow if passed.
-     *
+     * @param  string  $authorizationCode  The authorization code from Spotify.
+     * @param  string  $codeVerifier  Optional. A previously generated code verifier. Will assume a PKCE flow if passed.
      * @return bool True when the access token was successfully granted, false otherwise.
      */
     public function requestAccessToken(string $authorizationCode, string $codeVerifier = ''): bool
@@ -262,14 +324,14 @@ class Session
      */
     public function requestCredentialsToken(): bool
     {
-        $payload = base64_encode($this->getClientId() . ':' . $this->getClientSecret());
+        $payload = base64_encode($this->getClientId().':'.$this->getClientSecret());
 
         $parameters = [
             'grant_type' => 'client_credentials',
         ];
 
         $headers = [
-            'Authorization' => 'Basic ' . $payload,
+            'Authorization' => 'Basic '.$payload,
         ];
 
         ['body' => $response] = $this->request->auth('POST', '/v1/oauth2/token', $parameters, $headers);
@@ -283,75 +345,5 @@ class Session
         }
 
         return false;
-    }
-
-    /**
-     * Set the access token.
-     *
-     * @param string $accessToken The access token
-     *
-     * @return self
-     */
-    public function setAccessToken(string $accessToken): self
-    {
-        $this->accessToken = $accessToken;
-
-        return $this;
-    }
-
-    /**
-     * Set the client ID.
-     *
-     * @param string $clientId The client ID.
-     *
-     * @return self
-     */
-    public function setClientId(string $clientId): self
-    {
-        $this->clientId = $clientId;
-
-        return $this;
-    }
-
-    /**
-     * Set the client secret.
-     *
-     * @param string $clientSecret The client secret.
-     *
-     * @return self
-     */
-    public function setClientSecret(string $clientSecret): self
-    {
-        $this->clientSecret = $clientSecret;
-
-        return $this;
-    }
-
-    /**
-     * Set the client's redirect URI.
-     *
-     * @param string $redirectUri The redirect URI.
-     *
-     * @return self
-     */
-    public function setRedirectUri(string $redirectUri): self
-    {
-        $this->redirectUri = $redirectUri;
-
-        return $this;
-    }
-
-    /**
-     * Set the session's refresh token.
-     *
-     * @param string $refreshToken The refresh token.
-     *
-     * @return self
-     */
-    public function setRefreshToken(string $refreshToken): self
-    {
-        $this->refreshToken = $refreshToken;
-
-        return $this;
     }
 }
