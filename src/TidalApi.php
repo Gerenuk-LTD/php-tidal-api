@@ -74,7 +74,7 @@ class TidalApi
 
     /**
      * Get an album.
-     * https://developer.tidal.com/apiref?spec=catalogue-v2&ref=get-album-v2&at=THIRD_PARTY_PROD
+     * https://developer.tidal.com/apiref?spec=catalogue-v2&ref=get-album-v2
      *
      * @param  string  $albumId  Id of the album.
      * @param  string  $countryCode  ISO 3166-1 alpha-2 country code.
@@ -170,7 +170,7 @@ class TidalApi
 
     /**
      * Get an albums artists relationship.
-     * https://developer.tidal.com/apiref?spec=catalogue-v2&ref=get-album-artists-v2&at=THIRD_PARTY_PROD
+     * https://developer.tidal.com/apiref?spec=catalogue-v2&ref=get-album-artists-v2
      *
      * @param  string  $albumId  Id of the album.
      * @param  string  $countryCode  ISO 3166-1 alpha-2 country code.
@@ -219,7 +219,7 @@ class TidalApi
 
     /**
      * Get an albums items relationship.
-     * https://developer.tidal.com/apiref?spec=catalogue-v2&ref=get-album-items-v2&at=THIRD_PARTY_PROD
+     * https://developer.tidal.com/apiref?spec=catalogue-v2&ref=get-album-items-v2
      *
      * @param  string  $albumId  Id of the album.
      * @param  string  $countryCode  ISO 3166-1 alpha-2 country code.
@@ -239,7 +239,7 @@ class TidalApi
 
     /**
      * Get an albums providers relationship.
-     * https://developer.tidal.com/apiref?spec=catalogue-v2&ref=get-album-providers-v2&at=THIRD_PARTY_PROD
+     * https://developer.tidal.com/apiref?spec=catalogue-v2&ref=get-album-providers-v2
      *
      * @param  string  $albumId  Id of the album.
      * @param  string  $countryCode  ISO 3166-1 alpha-2 country code.
@@ -259,7 +259,7 @@ class TidalApi
 
     /**
      * Get an albums similar albums relationship.
-     * https://developer.tidal.com/apiref?spec=catalogue-v2&ref=get-similar-albums-v2&at=THIRD_PARTY_PROD
+     * https://developer.tidal.com/apiref?spec=catalogue-v2&ref=get-similar-albums-v2
      *
      * @param  string  $albumId  Id of the album.
      * @param  string  $countryCode  ISO 3166-1 alpha-2 country code.
@@ -279,7 +279,7 @@ class TidalApi
 
     /**
      * Get an artist.
-     * https://developer.tidal.com/apiref?spec=catalogue-v2&ref=get-artist-v2&at=THIRD_PARTY_PROD
+     * https://developer.tidal.com/apiref?spec=catalogue-v2&ref=get-artist-v2
      *
      * @param  string  $artistId  Id of the artist.
      * @param  string  $countryCode  ISO 3166-1 alpha-2 country code.
@@ -305,7 +305,7 @@ class TidalApi
 
     /**
      * Get an artists albums relationship.
-     * https://developer.tidal.com/apiref?spec=catalogue-v2&ref=get-artist-albums-v2&at=THIRD_PARTY_PROD
+     * https://developer.tidal.com/apiref?spec=catalogue-v2&ref=get-artist-albums-v2
      *
      * @param  string  $artistId  Id of the artist.
      * @param  string  $countryCode  ISO 3166-1 alpha-2 country code.
@@ -354,7 +354,7 @@ class TidalApi
 
     /**
      * Get an artists radio relationship.
-     * https://developer.tidal.com/apiref?spec=catalogue-v2&ref=get-artist-radio-v2&at=THIRD_PARTY_PROD
+     * https://developer.tidal.com/apiref?spec=catalogue-v2&ref=get-artist-radio-v2
      *
      * @param  string  $artistId  Id of the artist.
      * @param  string  $countryCode  ISO 3166-1 alpha-2 country code.
@@ -374,7 +374,7 @@ class TidalApi
 
     /**
      * Get an artists similar artists relationship.
-     * https://developer.tidal.com/apiref?spec=catalogue-v2&ref=get-similar-artists-v2&at=THIRD_PARTY_PROD
+     * https://developer.tidal.com/apiref?spec=catalogue-v2&ref=get-similar-artists-v2
      *
      * @param  string  $artistId  Id of the artist.
      * @param  string  $countryCode  ISO 3166-1 alpha-2 country code.
@@ -394,7 +394,7 @@ class TidalApi
 
     /**
      * Get an artists track providers relationship.
-     * https://developer.tidal.com/apiref?spec=catalogue-v2&ref=get-artist-track-providers-v2&at=THIRD_PARTY_PROD
+     * https://developer.tidal.com/apiref?spec=catalogue-v2&ref=get-artist-track-providers-v2
      *
      * @param  string  $artistId  Id of the artist.
      * @param  string  $countryCode  ISO 3166-1 alpha-2 country code.
@@ -414,7 +414,7 @@ class TidalApi
 
     /**
      * Get an artists tracks relationship.
-     * https://developer.tidal.com/apiref?spec=catalogue-v2&ref=get-artist-tracks-v2&at=THIRD_PARTY_PROD
+     * https://developer.tidal.com/apiref?spec=catalogue-v2&ref=get-artist-tracks-v2
      *
      * @param  string  $artistId  Id of the artist.
      * @param  string  $countryCode  ISO 3166-1 alpha-2 country code.
@@ -434,7 +434,7 @@ class TidalApi
 
     /**
      * Get an artists videos relationship.
-     * https://developer.tidal.com/apiref?spec=catalogue-v2&ref=get-artist-videos-v2&at=THIRD_PARTY_PROD
+     * https://developer.tidal.com/apiref?spec=catalogue-v2&ref=get-artist-videos-v2
      *
      * @param  string  $artistId  Id of the artist.
      * @param  string  $countryCode  ISO 3166-1 alpha-2 country code.
@@ -454,7 +454,7 @@ class TidalApi
 
     /**
      * Get a track.
-     * https://developer.tidal.com/apiref?spec=catalogue-v2&ref=get-artist-videos-v2&at=THIRD_PARTY_PROD
+     * https://developer.tidal.com/apiref?spec=catalogue-v2&ref=get-artist-videos-v2
      *
      * @param  string  $trackId  Id of the track.
      * @param  string  $countryCode  ISO 3166-1 alpha-2 country code.
@@ -479,7 +479,7 @@ class TidalApi
 
     /**
      * Get a tracks albums relationship.
-     * https://developer.tidal.com/apiref?spec=catalogue-v2&ref=get-track-albums-v2&at=THIRD_PARTY_PROD
+     * https://developer.tidal.com/apiref?spec=catalogue-v2&ref=get-track-albums-v2
      *
      * @param  string  $trackId  Id of the track.
      * @param  string  $countryCode  ISO 3166-1 alpha-2 country code.
@@ -528,7 +528,7 @@ class TidalApi
 
     /**
      * Get a tracks artists relationship.
-     * https://developer.tidal.com/apiref?spec=catalogue-v2&ref=get-track-artists-v2&at=THIRD_PARTY_PROD
+     * https://developer.tidal.com/apiref?spec=catalogue-v2&ref=get-track-artists-v2
      *
      * @param  string  $trackId  Id of the track.
      * @param  string  $countryCode  ISO 3166-1 alpha-2 country code.
@@ -548,7 +548,7 @@ class TidalApi
 
     /**
      * Get a tracks providers relationship.
-     * https://developer.tidal.com/apiref?spec=catalogue-v2&ref=get-track-providers-v2&at=THIRD_PARTY_PROD
+     * https://developer.tidal.com/apiref?spec=catalogue-v2&ref=get-track-providers-v2
      *
      * @param  string  $trackId  Id of the track.
      * @param  string  $countryCode  ISO 3166-1 alpha-2 country code.
@@ -568,7 +568,7 @@ class TidalApi
 
     /**
      * Get a tracks radio relationship.
-     * https://developer.tidal.com/apiref?spec=catalogue-v2&ref=get-track-radio-v2&at=THIRD_PARTY_PROD
+     * https://developer.tidal.com/apiref?spec=catalogue-v2&ref=get-track-radio-v2
      *
      * @param  string  $trackId  Id of the track.
      * @param  string  $countryCode  ISO 3166-1 alpha-2 country code.
@@ -588,7 +588,7 @@ class TidalApi
 
     /**
      * Get a tracks similar tracks relationship.
-     * https://developer.tidal.com/apiref?spec=catalogue-v2&ref=get-track-radio-v2&at=THIRD_PARTY_PROD
+     * https://developer.tidal.com/apiref?spec=catalogue-v2&ref=get-track-radio-v2
      *
      * @param  string  $trackId  Id of the track.
      * @param  string  $countryCode  ISO 3166-1 alpha-2 country code.
@@ -608,7 +608,7 @@ class TidalApi
 
     /**
      * Get a video.
-     * https://developer.tidal.com/apiref?spec=catalogue-v2&ref=get-video-v2&at=THIRD_PARTY_PROD
+     * https://developer.tidal.com/apiref?spec=catalogue-v2&ref=get-video-v2
      *
      * @param  string  $videoId  Id of the video.
      * @param  string  $countryCode  ISO 3166-1 alpha-2 country code.
@@ -633,7 +633,7 @@ class TidalApi
 
     /**
      * Get a videos albums relationship.
-     * https://developer.tidal.com/apiref?spec=catalogue-v2&ref=get-video-albums-v2&at=THIRD_PARTY_PROD
+     * https://developer.tidal.com/apiref?spec=catalogue-v2&ref=get-video-albums-v2
      *
      * @param  string  $videoId  Id of the video.
      * @param  string  $countryCode  ISO 3166-1 alpha-2 country code.
@@ -682,7 +682,7 @@ class TidalApi
 
     /**
      * Get a videos artists relationship.
-     * https://developer.tidal.com/apiref?spec=catalogue-v2&ref=get-video-artists-v2&at=THIRD_PARTY_PROD
+     * https://developer.tidal.com/apiref?spec=catalogue-v2&ref=get-video-artists-v2
      *
      * @param  string  $videoId  Id of the video.
      * @param  string  $countryCode  ISO 3166-1 alpha-2 country code.
@@ -702,7 +702,7 @@ class TidalApi
 
     /**
      * Get a videos providers relationship.
-     * https://developer.tidal.com/apiref?spec=catalogue-v2&ref=get-video-providers-v2&at=THIRD_PARTY_PROD
+     * https://developer.tidal.com/apiref?spec=catalogue-v2&ref=get-video-providers-v2
      *
      * @param  string  $videoId  Id of the video.
      * @param  string  $countryCode  ISO 3166-1 alpha-2 country code.
@@ -722,7 +722,7 @@ class TidalApi
 
     /**
      * Get a provider.
-     * https://developer.tidal.com/apiref?spec=catalogue-v2&ref=get-provider-v2&at=THIRD_PARTY_PROD
+     * https://developer.tidal.com/apiref?spec=catalogue-v2&ref=get-provider-v2
      *
      * @param  string  $providerId  Id of the provider.
      * @param  array|object  $options  Optional. Options for the provider.
@@ -742,7 +742,7 @@ class TidalApi
 
     /**
      * Get the currently authenticated user.
-     * https://developer.tidal.com/apiref?spec=user-v2&ref=get-me-v2&at=THIRD_PARTY_PROD
+     * https://developer.tidal.com/apiref?spec=user-v2&ref=get-me-v2
      *
      * @param  array  $options  Optional. Options for the user.
      * @return array|object The currently authenticated user. Type is controlled by the `return_assoc` option.
@@ -761,7 +761,7 @@ class TidalApi
 
     /**
      * Get a user.
-     * https://developer.tidal.com/apiref?spec=user-v2&ref=get-user-v2&at=THIRD_PARTY_PROD
+     * https://developer.tidal.com/apiref?spec=user-v2&ref=get-user-v2
      *
      * @param  string  $userId  Id of the video.
      * @param  array|object  $options  Optional. Options for the user.
@@ -781,7 +781,7 @@ class TidalApi
 
     /**
      * Get a users entitlements relationship.
-     * https://developer.tidal.com/apiref?spec=user-v2&ref=get-user-userentitlements-v2&at=THIRD_PARTY_PROD
+     * https://developer.tidal.com/apiref?spec=user-v2&ref=get-user-userentitlements-v2
      *
      * @param  string  $userId  Id of the user.
      * @param  array|object  $options  Optional. Options for the video.
@@ -817,7 +817,7 @@ class TidalApi
 
     /**
      * Get a users public profile relationship.
-     * https://developer.tidal.com/apiref?spec=user-v2&ref=get-user-userprofile-v2&at=THIRD_PARTY_PROD
+     * https://developer.tidal.com/apiref?spec=user-v2&ref=get-user-userprofile-v2
      *
      * @param  string  $userId  Id of the user.
      * @param  string  $locale  The locale.
@@ -841,7 +841,7 @@ class TidalApi
 
     /**
      * Get a users recommendations relationship.
-     * https://developer.tidal.com/apiref?spec=user-v2&ref=get-user-userrecommendations-v2&at=THIRD_PARTY_PROD
+     * https://developer.tidal.com/apiref?spec=user-v2&ref=get-user-userrecommendations-v2
      *
      * @param  string  $userId  Id of the user.
      * @param  array|object  $options  Optional. Options for the video.
@@ -857,7 +857,7 @@ class TidalApi
 
     /**
      * Get the currently authenticated users playlists.
-     * https://developer.tidal.com/apiref?spec=user-v2&ref=get-user-userrecommendations-v2&at=THIRD_PARTY_PROD
+     * https://developer.tidal.com/apiref?spec=user-v2&ref=get-user-userrecommendations-v2
      *
      * @param  array  $options  Optional. Options for the users playlists.
      * @return array|object The currently authenticated users playlist. Type is controlled by the `return_assoc` option.
