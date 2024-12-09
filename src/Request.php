@@ -6,11 +6,11 @@ namespace TidalApi;
 
 class Request
 {
-    public const string LOGIN_URL = 'https://login.tidal.com';
+    public const  LOGIN_URL = 'https://login.tidal.com';
 
-    public const string AUTH_URL = 'https://auth.tidal.com';
+    public const  AUTH_URL = 'https://auth.tidal.com';
 
-    public const string API_URL = 'https://openapi.tidal.com';
+    public const  API_URL = 'https://openapi.tidal.com';
 
     protected array $lastResponse = [];
 
@@ -98,7 +98,7 @@ class Request
                 $options[CURLOPT_CUSTOMREQUEST] = $method;
 
                 if ($parameters) {
-                    $options[CURLOPT_URL] .= '/?' . $parameters;
+                    $options[CURLOPT_URL] .= '?' . $parameters;
                 }
 
                 break;

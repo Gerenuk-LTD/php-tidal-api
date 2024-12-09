@@ -8,9 +8,9 @@ use Exception;
 
 class TidalApiException extends Exception
 {
-    public const string TOKEN_EXPIRED = 'The access token expired';
+    public const TOKEN_EXPIRED = 'The access token expired';
 
-    public const int RATE_LIMIT_STATUS = 429;
+    public const RATE_LIMIT_STATUS = 429;
 
     /**
      * The reason string from a player request's error object.
