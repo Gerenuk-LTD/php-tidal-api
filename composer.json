@@ -40,6 +40,6 @@
     }
   },
   "scripts": {
-    "test": "./vendor/bin/pest"
+    "pint": "pint --config vendor/gerenuk/php-coding-style/pint.json"
   }
 }

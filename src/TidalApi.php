@@ -73,32 +73,6 @@ class TidalApi
     }
 
     /**
-     * Get an album.
-     * https://developer.tidal.com/apiref?spec=catalogue-v2&ref=get-album-v2
-     *
-     * @param  string  $albumId  Id of the album.
-     * @param  string  $countryCode  ISO 3166-1 alpha-2 country code.
-     * @param  array|object  $options  Optional. Options for the album.
-     *                                 - array include Optional. Customise related resource to be returned.
-     * @return array|object The requested album. Type is controlled by the `return_assoc` option.
-     *
-     * @throws TidalApiAuthException
-     * @throws TidalApiException
-     */
-    public function getAlbum(string $albumId, string $countryCode, array|object $options = []): array|object
-    {
-        $uri = '/v2/albums/' . $albumId;
-
-        $options = array_merge([
-            'countryCode' => $countryCode,
-        ], (array) $options);
-
-        $this->lastResponse = $this->sendRequest('GET', $uri, $options);
-
-        return $this->lastResponse['body'];
-    }
-
-    /**
      * Send a request to the Tidal Api, automatically refreshing the access token as needed.
      *
      * @param  string  $method  The HTTP method to use.
@@ -169,23 +143,54 @@ class TidalApi
     }
 
     /**
-     * Get an albums artists relationship.
-     * https://developer.tidal.com/apiref?spec=catalogue-v2&ref=get-album-artists-v2
+     * Get all album details by available filters.
+     * https://developer.tidal.com/apiref?spec=catalogue-v2&ref=get-all-albums
+     *
+     * @param  string  $countryCode  ISO 3166-1 alpha-2 country code.
+     * @param  array  $options  Optional. Options for the album.
+     *                          - array include Optional. Customise related resource to be returned.
+     * @return array|object All album details. Type is controlled by the `return_assoc` option.
+     *
+     * @throws TidalApiAuthException
+     * @throws TidalApiException
+     */
+    public function getAlbums(string $countryCode, array $options = []): array|object
+    {
+        $uri = '/v2/albums/';
+
+        $options = array_merge([
+            'countryCode' => $countryCode,
+        ], $options);
+
+        $this->lastResponse = $this->sendRequest('GET', $uri, $options);
+
+        return $this->lastResponse['body'];
+    }
+
+    /**
+     * Get album details by a unique id.
+     * https://developer.tidal.com/apiref?spec=catalogue-v2&ref=get-single-album
      *
      * @param  string  $albumId  Id of the album.
      * @param  string  $countryCode  ISO 3166-1 alpha-2 country code.
-     * @param  array|object  $options  Optional. Options for the album.
-     * @return array|object The requested album relationship. Type is controlled by the `return_assoc` option.
+     * @param  array  $options  Optional. Options for the album.
+     *                          - array include Optional. Customise related resource to be returned.
+     * @return array|object The requested album's details. Type is controlled by the `return_assoc` option.
      *
-     * @throws TidalApiException
      * @throws TidalApiAuthException
+     * @throws TidalApiException
      */
-    public function getAlbumRelationshipArtists(
-        string $albumId,
-        string $countryCode,
-        array|object $options = [],
-    ): array|object {
-        return $this->getAlbumRelationship($albumId, $countryCode, 'artists', $options);
+    public function getAlbum(string $albumId, string $countryCode, array $options = []): array|object
+    {
+        $uri = '/v2/albums/' . $albumId;
+
+        $options = array_merge([
+            'countryCode' => $countryCode,
+        ], $options);
+
+        $this->lastResponse = $this->sendRequest('GET', $uri, $options);
+
+        return $this->lastResponse['body'];
     }
 
     /**
@@ -194,8 +199,8 @@ class TidalApi
      * @param  string  $albumId  Id of the album.
      * @param  string  $countryCode  ISO 3166-1 alpha-2 country code.
      * @param  string  $relationship  Relationship to return.
-     * @param  array|object  $options  Optional. Options for the album.
-     * @return array|object The requested album. Type is controlled by the `return_assoc` option.
+     * @param  array  $options  Optional. Options for the album.
+     * @return array|object The requested album relationship. Type is controlled by the `return_assoc` option.
      *
      * @throws TidalApiException
      * @throws TidalApiAuthException
@@ -204,13 +209,13 @@ class TidalApi
         string $albumId,
         string $countryCode,
         string $relationship,
-        array|object $options = [],
+        array $options = [],
     ): array|object {
         $uri = '/v2/albums/' . $albumId . '/relationships/' . $relationship;
 
         $options = array_merge([
             'countryCode' => $countryCode,
-        ], (array) $options);
+        ], $options);
 
         $this->lastResponse = $this->sendRequest('GET', $uri, $options);
 
@@ -218,13 +223,33 @@ class TidalApi
     }
 
     /**
-     * Get an albums items relationship.
-     * https://developer.tidal.com/apiref?spec=catalogue-v2&ref=get-album-items-v2
+     * Get artists relationship details of the related album resource.
+     * https://developer.tidal.com/apiref?spec=catalogue-v2&ref=get-album-artists-relationship
      *
      * @param  string  $albumId  Id of the album.
      * @param  string  $countryCode  ISO 3166-1 alpha-2 country code.
-     * @param  array|object  $options  Optional. Options for the album.
-     * @return array|object The album items relationship. Type is controlled by the `return_assoc` option.
+     * @param  array  $options  Optional. Options for the album.
+     * @return array|object The requested album's artist relationship. Type is controlled by the `return_assoc` option.
+     *
+     * @throws TidalApiException
+     * @throws TidalApiAuthException
+     */
+    public function getAlbumRelationshipArtists(
+        string $albumId,
+        string $countryCode,
+        array $options = [],
+    ): array|object {
+        return $this->getAlbumRelationship($albumId, $countryCode, 'artists', $options);
+    }
+
+    /**
+     * Get items relationship details of the related album resource.
+     * https://developer.tidal.com/apiref?spec=catalogue-v2&ref=get-album-items-relationship
+     *
+     * @param  string  $albumId  Id of the album.
+     * @param  string  $countryCode  ISO 3166-1 alpha-2 country code.
+     * @param  array  $options  Optional. Options for the album.
+     * @return array|object The requested album's items relationship. Type is controlled by the `return_assoc` option.
      *
      * @throws TidalApiException
      * @throws TidalApiAuthException
@@ -232,19 +257,19 @@ class TidalApi
     public function getAlbumRelationshipItems(
         string $albumId,
         string $countryCode,
-        array|object $options = [],
+        array $options = [],
     ): array|object {
         return $this->getAlbumRelationship($albumId, $countryCode, 'items', $options);
     }
 
     /**
-     * Get an albums providers relationship.
-     * https://developer.tidal.com/apiref?spec=catalogue-v2&ref=get-album-providers-v2
+     * Get providers relationship details of the related album resource.
+     * https://developer.tidal.com/apiref?spec=catalogue-v2&ref=get-album-providers-relationship
      *
      * @param  string  $albumId  Id of the album.
      * @param  string  $countryCode  ISO 3166-1 alpha-2 country code.
-     * @param  array|object  $options  Optional. Options for the album.
-     * @return array|object The album providers relationship. Type is controlled by the `return_assoc` option.
+     * @param  array  $options  Optional. Options for the album.
+     * @return array|object The requested album's providers relationship. Type is controlled by the `return_assoc` option.
      *
      * @throws TidalApiException
      * @throws TidalApiAuthException
@@ -252,19 +277,19 @@ class TidalApi
     public function getAlbumRelationshipProviders(
         string $albumId,
         string $countryCode,
-        array|object $options = [],
+        array $options = [],
     ): array|object {
         return $this->getAlbumRelationship($albumId, $countryCode, 'providers', $options);
     }
 
     /**
-     * Get an albums similar albums relationship.
-     * https://developer.tidal.com/apiref?spec=catalogue-v2&ref=get-similar-albums-v2
+     * Get similarAlbums relationship details of the related album resource.
+     * https://developer.tidal.com/apiref?spec=catalogue-v2&ref=get-album-similaralbums-relationship
      *
      * @param  string  $albumId  Id of the album.
      * @param  string  $countryCode  ISO 3166-1 alpha-2 country code.
-     * @param  array|object  $options  Optional. Options for the album.
-     * @return array|object The album similar albums' relationship. Type is controlled by the `return_assoc` option.
+     * @param  array  $options  Optional. Options for the album.
+     * @return array|object The requested album's similarAlbums relationship. Type is controlled by the `return_assoc` option.
      *
      * @throws TidalApiException
      * @throws TidalApiAuthException
@@ -272,31 +297,24 @@ class TidalApi
     public function getAlbumRelationshipSimilarAlbums(
         string $albumId,
         string $countryCode,
-        array|object $options = [],
+        array $options = [],
     ): array|object {
         return $this->getAlbumRelationship($albumId, $countryCode, 'similarAlbums', $options);
     }
 
     /**
-     * Get an artist.
-     * https://developer.tidal.com/apiref?spec=catalogue-v2&ref=get-artist-v2
+     * Get all artistRole details by available filters.
+     * https://developer.tidal.com/apiref?spec=catalogue-v2&ref=get-all-artistroles
      *
-     * @param  string  $artistId  Id of the artist.
-     * @param  string  $countryCode  ISO 3166-1 alpha-2 country code.
-     * @param  array|object  $options  Optional. Options for the artist.
-     *                                 - array include Optional. Customise related resource to be returned.
-     * @return array|object The requested artist. Type is controlled by the `return_assoc` option.
+     * @param  array  $options  Optional. Options for the album.
+     * @return array|object All artistRole details. Type is controlled by the `return_assoc` option.
      *
-     * @throws TidalApiAuthException
      * @throws TidalApiException
+     * @throws TidalApiAuthException
      */
-    public function getArtist(string $artistId, string $countryCode, array|object $options = []): array|object
+    public function getArtistRoles(array $options = []): array|object
     {
-        $uri = '/v2/artists/' . $artistId;
-
-        $options = array_merge([
-            'countryCode' => $countryCode,
-        ], (array) $options);
+        $uri = '/v2/artistsRoles/';
 
         $this->lastResponse = $this->sendRequest('GET', $uri, $options);
 
@@ -304,23 +322,73 @@ class TidalApi
     }
 
     /**
-     * Get an artists albums relationship.
-     * https://developer.tidal.com/apiref?spec=catalogue-v2&ref=get-artist-albums-v2
+     * Get an artistRole details by a unique id.
+     * https://developer.tidal.com/apiref?spec=catalogue-v2&ref=get-artistrolesid
      *
-     * @param  string  $artistId  Id of the artist.
-     * @param  string  $countryCode  ISO 3166-1 alpha-2 country code.
-     * @param  array|object  $options  Optional. Options for the artist.
-     * @return array|object The artist albums relationship. Type is controlled by the `return_assoc` option.
+     * @param  array  $options  Optional. Options for the album.
+     * @return array|object The requested artistRole's details. Type is controlled by the `return_assoc` option.
      *
      * @throws TidalApiException
      * @throws TidalApiAuthException
      */
-    public function getArtistRelationshipAlbums(
-        string $artistId,
-        string $countryCode,
-        array|object $options = [],
-    ): array|object {
-        return $this->getArtistRelationship($artistId, $countryCode, 'albums', $options);
+    public function getArtistRole(string $artistRoleId, array $options = []): array|object
+    {
+        $uri = '/v2/artistsRoles/' . $artistRoleId;
+
+        $this->lastResponse = $this->sendRequest('GET', $uri, $options);
+
+        return $this->lastResponse['body'];
+    }
+
+    /**
+     * Get all artist details by available filters.
+     * https://developer.tidal.com/apiref?spec=catalogue-v2&ref=get-all-artists
+     *
+     * @param  string  $countryCode  ISO 3166-1 alpha-2 country code.
+     * @param  array  $options  Optional. Options for the artist.
+     *                          - array include Optional. Customise related resource to be returned.
+     * @return array|object All artist details. Type is controlled by the `return_assoc` option.
+     *
+     * @throws TidalApiAuthException
+     * @throws TidalApiException
+     */
+    public function getArtists(string $countryCode, array $options = []): array|object
+    {
+        $uri = '/v2/artists/';
+
+        $options = array_merge([
+            'countryCode' => $countryCode,
+        ], $options);
+
+        $this->lastResponse = $this->sendRequest('GET', $uri, $options);
+
+        return $this->lastResponse['body'];
+    }
+
+    /**
+     * Get an artist details by a unique id.
+     * https://developer.tidal.com/apiref?spec=catalogue-v2&ref=get-single-artist
+     *
+     * @param  string  $artistId  Id of the artist.
+     * @param  string  $countryCode  ISO 3166-1 alpha-2 country code.
+     * @param  array  $options  Optional. Options for the artist.
+     *                          - array include Optional. Customise related resource to be returned.
+     * @return array|object The requested artist's details. Type is controlled by the `return_assoc` option.
+     *
+     * @throws TidalApiAuthException
+     * @throws TidalApiException
+     */
+    public function getArtist(string $artistId, string $countryCode, array $options = []): array|object
+    {
+        $uri = '/v2/artists/' . $artistId;
+
+        $options = array_merge([
+            'countryCode' => $countryCode,
+        ], $options);
+
+        $this->lastResponse = $this->sendRequest('GET', $uri, $options);
+
+        return $this->lastResponse['body'];
     }
 
     /**
@@ -329,8 +397,8 @@ class TidalApi
      * @param  string  $artistId  Id of the artist.
      * @param  string  $countryCode  ISO 3166-1 alpha-2 country code.
      * @param  string  $relationship  Relationship to return.
-     * @param  array|object  $options  Optional. Options for the artist.
-     * @return array|object The requested album. Type is controlled by the `return_assoc` option.
+     * @param  array  $options  Optional. Options for the artist.
+     * @return array|object The requested artist relationship. Type is controlled by the `return_assoc` option.
      *
      * @throws TidalApiException
      * @throws TidalApiAuthException
@@ -339,13 +407,13 @@ class TidalApi
         string $artistId,
         string $countryCode,
         string $relationship,
-        array|object $options = [],
+        array $options = [],
     ): array|object {
         $uri = '/v2/artists/' . $artistId . '/relationships/' . $relationship;
 
         $options = array_merge([
             'countryCode' => $countryCode,
-        ], (array) $options);
+        ], $options);
 
         $this->lastResponse = $this->sendRequest('GET', $uri, $options);
 
@@ -353,13 +421,33 @@ class TidalApi
     }
 
     /**
-     * Get an artists radio relationship.
-     * https://developer.tidal.com/apiref?spec=catalogue-v2&ref=get-artist-radio-v2
+     * Get albums relationship details of the related artist resource.
+     * https://developer.tidal.com/apiref?spec=catalogue-v2&ref=get-artist-albums-relationship
      *
      * @param  string  $artistId  Id of the artist.
      * @param  string  $countryCode  ISO 3166-1 alpha-2 country code.
-     * @param  array|object  $options  Optional. Options for the artist.
-     * @return array|object The artist albums relationship. Type is controlled by the `return_assoc` option.
+     * @param  array  $options  Optional. Options for the artist.
+     * @return array|object The requested artist's albums relationship. Type is controlled by the `return_assoc` option.
+     *
+     * @throws TidalApiException
+     * @throws TidalApiAuthException
+     */
+    public function getArtistRelationshipAlbums(
+        string $artistId,
+        string $countryCode,
+        array $options = [],
+    ): array|object {
+        return $this->getArtistRelationship($artistId, $countryCode, 'albums', $options);
+    }
+
+    /**
+     * Get radio relationship details of the related artist resource.
+     * https://developer.tidal.com/apiref?spec=catalogue-v2&ref=get-artist-radio-relationship
+     *
+     * @param  string  $artistId  Id of the artist.
+     * @param  string  $countryCode  ISO 3166-1 alpha-2 country code.
+     * @param  array  $options  Optional. Options for the artist.
+     * @return array|object The requested artist's radio relationship. Type is controlled by the `return_assoc` option.
      *
      * @throws TidalApiException
      * @throws TidalApiAuthException
@@ -367,19 +455,39 @@ class TidalApi
     public function getArtistRelationshipRadio(
         string $artistId,
         string $countryCode,
-        array|object $options = [],
+        array $options = [],
     ): array|object {
         return $this->getArtistRelationship($artistId, $countryCode, 'radio', $options);
     }
 
     /**
-     * Get an artists similar artists relationship.
-     * https://developer.tidal.com/apiref?spec=catalogue-v2&ref=get-similar-artists-v2
+     * Get roles relationship details of the related artist resource.
+     * https://developer.tidal.com/apiref?spec=catalogue-v2&ref=get-artist-roles-relationship
      *
      * @param  string  $artistId  Id of the artist.
      * @param  string  $countryCode  ISO 3166-1 alpha-2 country code.
-     * @param  array|object  $options  Optional. Options for the artist.
-     * @return array|object The artist similar artists' relationship. Type is controlled by the `return_assoc` option.
+     * @param  array  $options  Optional. Options for the artist.
+     * @return array|object The requested artist's roles relationship. Type is controlled by the `return_assoc` option.
+     *
+     * @throws TidalApiException
+     * @throws TidalApiAuthException
+     */
+    public function getArtistRelationshipRoles(
+        string $artistId,
+        string $countryCode,
+        array $options = [],
+    ): array|object {
+        return $this->getArtistRelationship($artistId, $countryCode, 'roles', $options);
+    }
+
+    /**
+     * Get similarArtists relationship details of the related artist resource.
+     * https://developer.tidal.com/apiref?spec=catalogue-v2&ref=get-artist-similarartists-relationship
+     *
+     * @param  string  $artistId  Id of the artist.
+     * @param  string  $countryCode  ISO 3166-1 alpha-2 country code.
+     * @param  array  $options  Optional. Options for the artist.
+     * @return array|object The requested artist's similarArtists relationship. Type is controlled by the `return_assoc` option.
      *
      * @throws TidalApiException
      * @throws TidalApiAuthException
@@ -387,19 +495,19 @@ class TidalApi
     public function getArtistRelationshipSimilarArtists(
         string $artistId,
         string $countryCode,
-        array|object $options = [],
+        array $options = [],
     ): array|object {
         return $this->getArtistRelationship($artistId, $countryCode, 'similarArtists', $options);
     }
 
     /**
-     * Get an artists track providers relationship.
-     * https://developer.tidal.com/apiref?spec=catalogue-v2&ref=get-artist-track-providers-v2
+     * Get trackProviders relationship details of the related artist resource.
+     * https://developer.tidal.com/apiref?spec=catalogue-v2&ref=get-artist-trackproviders-relationship
      *
      * @param  string  $artistId  Id of the artist.
      * @param  string  $countryCode  ISO 3166-1 alpha-2 country code.
-     * @param  array|object  $options  Optional. Options for the artist.
-     * @return array|object The artist track providers relationship. Type is controlled by the `return_assoc` option.
+     * @param  array  $options  Optional. Options for the artist.
+     * @return array|object The requested artist's trackProviders relationship. Type is controlled by the `return_assoc` option.
      *
      * @throws TidalApiException
      * @throws TidalApiAuthException
@@ -407,19 +515,19 @@ class TidalApi
     public function getArtistRelationshipTrackProviders(
         string $artistId,
         string $countryCode,
-        array|object $options = [],
+        array $options = [],
     ): array|object {
-        return $this->getArtistRelationship($artistId, $countryCode, 'providers', $options);
+        return $this->getArtistRelationship($artistId, $countryCode, 'trackProviders', $options);
     }
 
     /**
-     * Get an artists tracks relationship.
-     * https://developer.tidal.com/apiref?spec=catalogue-v2&ref=get-artist-tracks-v2
+     * Get tracks relationship details of the related artist resource.
+     * https://developer.tidal.com/apiref?spec=catalogue-v2&ref=get-artist-tracks-relationship
      *
      * @param  string  $artistId  Id of the artist.
      * @param  string  $countryCode  ISO 3166-1 alpha-2 country code.
-     * @param  array|object  $options  Optional. Options for the artist.
-     * @return array|object The artist tracks relationship. Type is controlled by the `return_assoc` option.
+     * @param  array  $options  Optional. Options for the artist.
+     * @return array|object The requested artist's tracks relationship. Type is controlled by the `return_assoc` option.
      *
      * @throws TidalApiException
      * @throws TidalApiAuthException
@@ -427,19 +535,19 @@ class TidalApi
     public function getArtistRelationshipTracks(
         string $artistId,
         string $countryCode,
-        array|object $options = [],
+        array $options = [],
     ): array|object {
         return $this->getArtistRelationship($artistId, $countryCode, 'tracks', $options);
     }
 
     /**
-     * Get an artists videos relationship.
-     * https://developer.tidal.com/apiref?spec=catalogue-v2&ref=get-artist-videos-v2
+     * Get videos relationship details of the related artist resource.
+     * https://developer.tidal.com/apiref?spec=catalogue-v2&ref=get-artist-videos-relationship
      *
      * @param  string  $artistId  Id of the artist.
      * @param  string  $countryCode  ISO 3166-1 alpha-2 country code.
-     * @param  array|object  $options  Optional. Options for the artist.
-     * @return array|object The artist videos relationship. Type is controlled by the `return_assoc` option.
+     * @param  array  $options  Optional. Options for the artist.
+     * @return array|object The requested artist's videos relationship. Type is controlled by the `return_assoc` option.
      *
      * @throws TidalApiException
      * @throws TidalApiAuthException
@@ -447,30 +555,24 @@ class TidalApi
     public function getArtistRelationshipVideos(
         string $artistId,
         string $countryCode,
-        array|object $options = [],
+        array $options = [],
     ): array|object {
         return $this->getArtistRelationship($artistId, $countryCode, 'videos', $options);
     }
 
     /**
-     * Get a track.
-     * https://developer.tidal.com/apiref?spec=catalogue-v2&ref=get-artist-videos-v2
+     * Get all provider details by available filters.
+     * https://developer.tidal.com/apiref?spec=catalogue-v2&ref=get-all-providers
      *
-     * @param  string  $trackId  Id of the track.
-     * @param  string  $countryCode  ISO 3166-1 alpha-2 country code.
-     * @param  array|object  $options  Optional. Options for the track.
-     * @return array|object The requested track. Type is controlled by the `return_assoc` option.
+     * @param  array  $options  Optional. Options for the provider.
+     * @return array|object All provider details. Type is controlled by the `return_assoc` option.
      *
      * @throws TidalApiException
      * @throws TidalApiAuthException
      */
-    public function getTrack(string $trackId, string $countryCode, array|object $options = []): array|object
+    public function getProviders(array $options = []): array|object
     {
-        $uri = '/v2/tracks/' . $trackId;
-
-        $options = array_merge([
-            'countryCode' => $countryCode,
-        ], (array) $options);
+        $uri = '/v2/providers/';
 
         $this->lastResponse = $this->sendRequest('GET', $uri, $options);
 
@@ -478,23 +580,72 @@ class TidalApi
     }
 
     /**
-     * Get a tracks albums relationship.
-     * https://developer.tidal.com/apiref?spec=catalogue-v2&ref=get-track-albums-v2
+     * Get provider details by a unique id.
+     * https://developer.tidal.com/apiref?spec=catalogue-v2&ref=get-providersid
      *
-     * @param  string  $trackId  Id of the track.
-     * @param  string  $countryCode  ISO 3166-1 alpha-2 country code.
-     * @param  array|object  $options  Optional. Options for the track.
-     * @return array|object The track albums relationship. Type is controlled by the `return_assoc` option.
+     * @param  string  $providerId  Id of the provider.
+     * @param  array  $options  Optional. Options for the provider.
+     * @return array|object The requested provider's details. Type is controlled by the `return_assoc` option.
      *
      * @throws TidalApiException
      * @throws TidalApiAuthException
      */
-    public function getTrackRelationshipAlbums(
-        string $trackId,
-        string $countryCode,
-        array|object $options = [],
-    ): array|object {
-        return $this->getTrackRelationship($trackId, $countryCode, 'albums', $options);
+    public function getProvider(string $providerId, array $options = []): array|object
+    {
+        $uri = '/v2/providers/' . $providerId;
+
+        $this->lastResponse = $this->sendRequest('GET', $uri, $options);
+
+        return $this->lastResponse['body'];
+    }
+
+    /**
+     * Get all track details by available filters.
+     * https://developer.tidal.com/apiref?spec=catalogue-v2&ref=get-all-tracks
+     *
+     * @param  string  $countryCode  ISO 3166-1 alpha-2 country code.
+     * @param  array  $options  Optional. Options for the track.
+     * @return array|object All track details. Type is controlled by the `return_assoc` option.
+     *
+     * @throws TidalApiException
+     * @throws TidalApiAuthException
+     */
+    public function getTracks(string $countryCode, array $options = []): array|object
+    {
+        $uri = '/v2/tracks/';
+
+        $options = array_merge([
+            'countryCode' => $countryCode,
+        ], $options);
+
+        $this->lastResponse = $this->sendRequest('GET', $uri, $options);
+
+        return $this->lastResponse['body'];
+    }
+
+    /**
+     * Get track details by a unique id.
+     * https://developer.tidal.com/apiref?spec=catalogue-v2&ref=get-single-track
+     *
+     * @param  string  $trackId  Id of the track.
+     * @param  string  $countryCode  ISO 3166-1 alpha-2 country code.
+     * @param  array  $options  Optional. Options for the track.
+     * @return array|object The requested track's details. Type is controlled by the `return_assoc` option.
+     *
+     * @throws TidalApiException
+     * @throws TidalApiAuthException
+     */
+    public function getTrack(string $trackId, string $countryCode, array $options = []): array|object
+    {
+        $uri = '/v2/tracks/' . $trackId;
+
+        $options = array_merge([
+            'countryCode' => $countryCode,
+        ], $options);
+
+        $this->lastResponse = $this->sendRequest('GET', $uri, $options);
+
+        return $this->lastResponse['body'];
     }
 
     /**
@@ -503,7 +654,7 @@ class TidalApi
      * @param  string  $trackId  Id of the track.
      * @param  string  $countryCode  ISO 3166-1 alpha-2 country code.
      * @param  string  $relationship  Relationship to return.
-     * @param  array|object  $options  Optional. Options for the track.
+     * @param  array  $options  Optional. Options for the track.
      * @return array|object The requested track relationship. Type is controlled by the `return_assoc` option.
      *
      * @throws TidalApiException
@@ -513,13 +664,13 @@ class TidalApi
         string $trackId,
         string $countryCode,
         string $relationship,
-        array|object $options = [],
+        array $options = [],
     ): array|object {
         $uri = '/v2/tracks/' . $trackId . '/relationships/' . $relationship;
 
         $options = array_merge([
             'countryCode' => $countryCode,
-        ], (array) $options);
+        ], $options);
 
         $this->lastResponse = $this->sendRequest('GET', $uri, $options);
 
@@ -527,13 +678,33 @@ class TidalApi
     }
 
     /**
-     * Get a tracks artists relationship.
-     * https://developer.tidal.com/apiref?spec=catalogue-v2&ref=get-track-artists-v2
+     * Get albums relationship details of the related track resource.
+     * https://developer.tidal.com/apiref?spec=catalogue-v2&ref=get-track-albums-relationship
      *
      * @param  string  $trackId  Id of the track.
      * @param  string  $countryCode  ISO 3166-1 alpha-2 country code.
-     * @param  array|object  $options  Optional. Options for the track.
-     * @return array|object The track artists relationship. Type is controlled by the `return_assoc` option.
+     * @param  array  $options  Optional. Options for the track.
+     * @return array|object The request track's albums relationship. Type is controlled by the `return_assoc` option.
+     *
+     * @throws TidalApiException
+     * @throws TidalApiAuthException
+     */
+    public function getTrackRelationshipAlbums(
+        string $trackId,
+        string $countryCode,
+        array $options = [],
+    ): array|object {
+        return $this->getTrackRelationship($trackId, $countryCode, 'albums', $options);
+    }
+
+    /**
+     * Get artists relationship details of the related track resource.
+     * https://developer.tidal.com/apiref?spec=catalogue-v2&ref=get-track-artists-relationship
+     *
+     * @param  string  $trackId  Id of the track.
+     * @param  string  $countryCode  ISO 3166-1 alpha-2 country code.
+     * @param  array  $options  Optional. Options for the track.
+     * @return array|object The requested track's artists relationship. Type is controlled by the `return_assoc` option.
      *
      * @throws TidalApiException
      * @throws TidalApiAuthException
@@ -541,19 +712,19 @@ class TidalApi
     public function getTrackRelationshipArtists(
         string $trackId,
         string $countryCode,
-        array|object $options = [],
+        array $options = [],
     ): array|object {
         return $this->getTrackRelationship($trackId, $countryCode, 'artists', $options);
     }
 
     /**
-     * Get a tracks providers relationship.
-     * https://developer.tidal.com/apiref?spec=catalogue-v2&ref=get-track-providers-v2
+     * Get providers relationship details of the related track resource.
+     * https://developer.tidal.com/apiref?spec=catalogue-v2&ref=get-track-providers-relationship
      *
      * @param  string  $trackId  Id of the track.
      * @param  string  $countryCode  ISO 3166-1 alpha-2 country code.
-     * @param  array|object  $options  Optional. Options for the track.
-     * @return array|object The track providers relationship. Type is controlled by the `return_assoc` option.
+     * @param  array  $options  Optional. Options for the track.
+     * @return array|object The requested track's providers relationship. Type is controlled by the `return_assoc` option.
      *
      * @throws TidalApiException
      * @throws TidalApiAuthException
@@ -561,19 +732,19 @@ class TidalApi
     public function getTrackRelationshipProviders(
         string $trackId,
         string $countryCode,
-        array|object $options = [],
+        array $options = [],
     ): array|object {
         return $this->getTrackRelationship($trackId, $countryCode, 'providers', $options);
     }
 
     /**
-     * Get a tracks radio relationship.
-     * https://developer.tidal.com/apiref?spec=catalogue-v2&ref=get-track-radio-v2
+     * Get radio relationship details of the related track resource.
+     * https://developer.tidal.com/apiref?spec=catalogue-v2&ref=get-track-radio-relationship
      *
      * @param  string  $trackId  Id of the track.
      * @param  string  $countryCode  ISO 3166-1 alpha-2 country code.
-     * @param  array|object  $options  Optional. Options for the track.
-     * @return array|object The track radio relationship. Type is controlled by the `return_assoc` option.
+     * @param  array  $options  Optional. Options for the track.
+     * @return array|object The requested track's radio relationship. Type is controlled by the `return_assoc` option.
      *
      * @throws TidalApiException
      * @throws TidalApiAuthException
@@ -581,19 +752,19 @@ class TidalApi
     public function getTrackRelationshipRadio(
         string $trackId,
         string $countryCode,
-        array|object $options = [],
+        array $options = [],
     ): array|object {
         return $this->getTrackRelationship($trackId, $countryCode, 'radio', $options);
     }
 
     /**
-     * Get a tracks similar tracks relationship.
-     * https://developer.tidal.com/apiref?spec=catalogue-v2&ref=get-track-radio-v2
+     * Get similarTracks relationship details of the related track resource.
+     * https://developer.tidal.com/apiref?spec=catalogue-v2&ref=get-track-similartracks-relationship
      *
      * @param  string  $trackId  Id of the track.
      * @param  string  $countryCode  ISO 3166-1 alpha-2 country code.
-     * @param  array|object  $options  Optional. Options for the track.
-     * @return array|object The track similar tracks relationship. Type is controlled by the `return_assoc` option.
+     * @param  array  $options  Optional. Options for the track.
+     * @return array|object The requested track's similarTracks relationship. Type is controlled by the `return_assoc` option.
      *
      * @throws TidalApiException
      * @throws TidalApiAuthException
@@ -601,26 +772,25 @@ class TidalApi
     public function getTrackRelationshipSimilarTracks(
         string $trackId,
         string $countryCode,
-        array|object $options = [],
+        array $options = [],
     ): array|object {
         return $this->getTrackRelationship($trackId, $countryCode, 'similarTracks', $options);
     }
 
     /**
-     * Get a video.
-     * https://developer.tidal.com/apiref?spec=catalogue-v2&ref=get-video-v2
+     * Get all video details by available filters.
+     * https://developer.tidal.com/apiref?spec=catalogue-v2&ref=get-all-videos
      *
-     * @param  string  $videoId  Id of the video.
      * @param  string  $countryCode  ISO 3166-1 alpha-2 country code.
-     * @param  array|object  $options  Optional. Options for the track.
-     * @return array|object The requested video. Type is controlled by the `return_assoc` option.
+     * @param  array  $options  Optional. Options for the track.
+     * @return array|object All video details. Type is controlled by the `return_assoc` option.
      *
      * @throws TidalApiException
      * @throws TidalApiAuthException
      */
-    public function getVideo(string $videoId, string $countryCode, array|object $options = []): array|object
+    public function getVideos(string $countryCode, array $options = []): array|object
     {
-        $uri = '/v2/videos/' . $videoId;
+        $uri = '/v2/videos/';
 
         $options = array_merge([
             'countryCode' => $countryCode,
@@ -632,23 +802,28 @@ class TidalApi
     }
 
     /**
-     * Get a videos albums relationship.
-     * https://developer.tidal.com/apiref?spec=catalogue-v2&ref=get-video-albums-v2
+     * Get video details by a unique id.
+     * https://developer.tidal.com/apiref?spec=catalogue-v2&ref=get-single-video
      *
      * @param  string  $videoId  Id of the video.
      * @param  string  $countryCode  ISO 3166-1 alpha-2 country code.
-     * @param  array|object  $options  Optional. Options for the video.
-     * @return array|object The video albums' relationship. Type is controlled by the `return_assoc` option.
+     * @param  array  $options  Optional. Options for the track.
+     * @return array|object The requested video's details. Type is controlled by the `return_assoc` option.
      *
      * @throws TidalApiException
      * @throws TidalApiAuthException
      */
-    public function getVideoRelationshipAlbums(
-        string $videoId,
-        string $countryCode,
-        array|object $options = [],
-    ): array|object {
-        return $this->getVideoRelationship($videoId, $countryCode, 'albums', $options);
+    public function getVideo(string $videoId, string $countryCode, array $options = []): array|object
+    {
+        $uri = '/v2/videos/' . $videoId;
+
+        $options = array_merge([
+            'countryCode' => $countryCode,
+        ], $options);
+
+        $this->lastResponse = $this->sendRequest('GET', $uri, $options);
+
+        return $this->lastResponse['body'];
     }
 
     /**
@@ -657,7 +832,7 @@ class TidalApi
      * @param  string  $videoId  Id of the video.
      * @param  string  $countryCode  ISO 3166-1 alpha-2 country code.
      * @param  string  $relationship  Relationship to return.
-     * @param  array|object  $options  Optional. Options for the video.
+     * @param  array  $options  Optional. Options for the video.
      * @return array|object The requested video relationship. Type is controlled by the `return_assoc` option.
      *
      * @throws TidalApiException
@@ -667,13 +842,13 @@ class TidalApi
         string $videoId,
         string $countryCode,
         string $relationship,
-        array|object $options = [],
+        array $options = [],
     ): array|object {
         $uri = '/v2/videos/' . $videoId . '/relationships/' . $relationship;
 
         $options = array_merge([
             'countryCode' => $countryCode,
-        ], (array) $options);
+        ], $options);
 
         $this->lastResponse = $this->sendRequest('GET', $uri, $options);
 
@@ -681,13 +856,33 @@ class TidalApi
     }
 
     /**
-     * Get a videos artists relationship.
-     * https://developer.tidal.com/apiref?spec=catalogue-v2&ref=get-video-artists-v2
+     * Get albums relationship details of the related video resource.
+     * https://developer.tidal.com/apiref?spec=catalogue-v2&ref=get-video-albums-relationship
      *
      * @param  string  $videoId  Id of the video.
      * @param  string  $countryCode  ISO 3166-1 alpha-2 country code.
-     * @param  array|object  $options  Optional. Options for the video.
-     * @return array|object The video artists' relationship. Type is controlled by the `return_assoc` option.
+     * @param  array  $options  Optional. Options for the video.
+     * @return array|object The requested video's albums relationship. Type is controlled by the `return_assoc` option.
+     *
+     * @throws TidalApiException
+     * @throws TidalApiAuthException
+     */
+    public function getVideoRelationshipAlbums(
+        string $videoId,
+        string $countryCode,
+        array $options = [],
+    ): array|object {
+        return $this->getVideoRelationship($videoId, $countryCode, 'albums', $options);
+    }
+
+    /**
+     * Get artists relationship details of the related video resource.
+     * https://developer.tidal.com/apiref?spec=catalogue-v2&ref=get-video-artists-relationship
+     *
+     * @param  string  $videoId  Id of the video.
+     * @param  string  $countryCode  ISO 3166-1 alpha-2 country code.
+     * @param  array  $options  Optional. Options for the video.
+     * @return array|object The requested video's artists relationship. Type is controlled by the `return_assoc` option.
      *
      * @throws TidalApiException
      * @throws TidalApiAuthException
@@ -695,19 +890,19 @@ class TidalApi
     public function getVideoRelationshipArtists(
         string $videoId,
         string $countryCode,
-        array|object $options = [],
+        array $options = [],
     ): array|object {
         return $this->getVideoRelationship($videoId, $countryCode, 'artists', $options);
     }
 
     /**
-     * Get a videos providers relationship.
-     * https://developer.tidal.com/apiref?spec=catalogue-v2&ref=get-video-providers-v2
+     * Get providers relationship details of the related video resource.
+     * https://developer.tidal.com/apiref?spec=catalogue-v2&ref=get-video-providers-relationship
      *
      * @param  string  $videoId  Id of the video.
      * @param  string  $countryCode  ISO 3166-1 alpha-2 country code.
-     * @param  array|object  $options  Optional. Options for the video.
-     * @return array|object The video providers' relationship. Type is controlled by the `return_assoc` option.
+     * @param  array  $options  Optional. Options for the video.
+     * @return array|object The requested video's providers relationship. Type is controlled by the `return_assoc` option.
      *
      * @throws TidalApiException
      * @throws TidalApiAuthException
@@ -715,25 +910,176 @@ class TidalApi
     public function getVideoRelationshipProviders(
         string $videoId,
         string $countryCode,
-        array|object $options = [],
+        array $options = [],
     ): array|object {
         return $this->getVideoRelationship($videoId, $countryCode, 'providers', $options);
     }
 
     /**
-     * Get a provider.
-     * https://developer.tidal.com/apiref?spec=catalogue-v2&ref=get-provider-v2
+     * Get search results for music: albums, artists, tracks, etc.
+     * https://developer.tidal.com/apiref?spec=search-v2&ref=get-searchresults-v2
      *
-     * @param  string  $providerId  Id of the provider.
-     * @param  array|object  $options  Optional. Options for the provider.
-     * @return array|object The requested provider. Type is controlled by the `return_assoc` option.
+     * @param  string  $query  The query to search for.
+     * @param  string  $countryCode  ISO 3166-1 alpha-2 country code.
+     * @param  array  $options  Optional. Options for the video.
+     * @return array|object The requested search results. Type is controlled by the `return_assoc` option.
      *
      * @throws TidalApiException
      * @throws TidalApiAuthException
      */
-    public function getProvider(string $providerId, array|object $options = []): array|object
+    public function search(string $query, string $countryCode, array $options = []): array|object
     {
-        $uri = '/v2/providers/' . $providerId;
+        $uri = '/v2/searchresults/' . $query;
+
+        $options = array_merge([
+            'countryCode' => $countryCode,
+        ], $options);
+
+        $this->lastResponse = $this->sendRequest('GET', $uri, $options);
+
+        return $this->lastResponse['body'];
+    }
+
+    /**
+     * Get a search relationship.
+     *
+     * @param  string  $query  The query to search for.
+     * @param  string  $countryCode  ISO 3166-1 alpha-2 country code.
+     * @param  string  $relationship  Relationship to return.
+     * @param  array  $options  Optional. Options for the video.
+     * @return array|object The requested search relationship. Type is controlled by the `return_assoc` option.
+     *
+     * @throws TidalApiException
+     * @throws TidalApiAuthException
+     */
+    public function getSearchRelationship(string $query, string $countryCode, string $relationship, array $options = []): array|object
+    {
+        $uri = '/v2/searchresults/' . $query . '/relationships/' . $relationship;
+
+        $options = array_merge([
+            'countryCode' => $countryCode,
+        ], $options);
+
+        $this->lastResponse = $this->sendRequest('GET', $uri, $options);
+
+        return $this->lastResponse['body'];
+    }
+
+    /**
+     * Get search results for album by a query.
+     * https://developer.tidal.com/apiref?spec=search-v2&ref=get-searchresults-relationship-albums-v2
+     *
+     * @param  string  $query  The query to search for.
+     * @param  string  $countryCode  ISO 3166-1 alpha-2 country code.
+     * @param  array  $options  Optional. Options for the search.
+     * @return array|object The requested searches albums relationship. Type is controlled by the `return_assoc` option.
+     *
+     * @throws TidalApiException
+     * @throws TidalApiAuthException
+     */
+    public function getSearchRelationshipAlbums(string $query, string $countryCode, array $options = []): array|object
+    {
+        return $this->getSearchRelationship($query, $countryCode, 'albums', $options);
+    }
+
+    /**
+     * Get search results for artists by a query.
+     * https://developer.tidal.com/apiref?spec=search-v2&ref=get-searchresults-relationship-artists-v2
+     *
+     * @param  string  $query  The query to search for.
+     * @param  string  $countryCode  ISO 3166-1 alpha-2 country code.
+     * @param  array  $options  Optional. Options for the search.
+     * @return array|object The requested searches artists relationship. Type is controlled by the `return_assoc` option.
+     *
+     * @throws TidalApiException
+     * @throws TidalApiAuthException
+     */
+    public function getSearchRelationshipArtists(string $query, string $countryCode, array $options = []): array|object
+    {
+        return $this->getSearchRelationship($query, $countryCode, 'artists', $options);
+    }
+
+    /**
+     * Get search results for playlists by a query.
+     * https://developer.tidal.com/apiref?spec=search-v2&ref=get-searchresults-relationship-playlists-v2
+     *
+     * @param  string  $query  The query to search for.
+     * @param  string  $countryCode  ISO 3166-1 alpha-2 country code.
+     * @param  array  $options  Optional. Options for the search.
+     * @return array|object The requested searches playlists relationship. Type is controlled by the `return_assoc` option.
+     *
+     * @throws TidalApiException
+     * @throws TidalApiAuthException
+     */
+    public function getSearchRelationshipPlaylists(string $query, string $countryCode, array $options = []): array|object
+    {
+        return $this->getSearchRelationship($query, $countryCode, 'playlists', $options);
+    }
+
+    /**
+     * Get search results for top hits by a query: artists, albums, tracks, videos.
+     * https://developer.tidal.com/apiref?spec=search-v2&ref=get-searchresults-relationship-tophits-v2
+     *
+     * @param  string  $query  The query to search for.
+     * @param  string  $countryCode  ISO 3166-1 alpha-2 country code.
+     * @param  array  $options  Optional. Options for the search.
+     * @return array|object The requested searches topHits relationship. Type is controlled by the `return_assoc` option.
+     *
+     * @throws TidalApiException
+     * @throws TidalApiAuthException
+     */
+    public function getSearchRelationshipTopHits(string $query, string $countryCode, array $options = []): array|object
+    {
+        return $this->getSearchRelationship($query, $countryCode, 'topHits', $options);
+    }
+
+    /**
+     * Get search results for tracks by a query.
+     * https://developer.tidal.com/apiref?spec=search-v2&ref=get-searchresults-relationship-tracks-v2
+     *
+     * @param  string  $query  The query to search for.
+     * @param  string  $countryCode  ISO 3166-1 alpha-2 country code.
+     * @param  array  $options  Optional. Options for the search.
+     * @return array|object The requested searches tracks relationship. Type is controlled by the `return_assoc` option.
+     *
+     * @throws TidalApiException
+     * @throws TidalApiAuthException
+     */
+    public function getSearchRelationshipTracks(string $query, string $countryCode, array $options = []): array|object
+    {
+        return $this->getSearchRelationship($query, $countryCode, 'tracks', $options);
+    }
+
+    /**
+     * Get search results for videos by a query.
+     * https://developer.tidal.com/apiref?spec=search-v2&ref=get-searchresults-relationship-videos-v2
+     *
+     * @param  string  $query  The query to search for.
+     * @param  string  $countryCode  ISO 3166-1 alpha-2 country code.
+     * @param  array  $options  Optional. Options for the search.
+     * @return array|object The requested searches videos relationship. Type is controlled by the `return_assoc` option.
+     *
+     * @throws TidalApiException
+     * @throws TidalApiAuthException
+     */
+    public function getSearchRelationshipVideos(string $query, string $countryCode, array $options = []): array|object
+    {
+        return $this->getSearchRelationship($query, $countryCode, 'videos', $options);
+    }
+
+    /**
+     * Get users by id.
+     * https://developer.tidal.com/apiref?spec=user-v2&ref=get-users-v2
+     *
+     * @param  array  $options  Optional. Options for the user.
+     * @return array|object The requested users' details. Type is controlled by the `return_assoc` option.
+     *
+     * @throws TidalApiAuthException
+     * @throws TidalApiException
+     */
+    public function getUsers(array $options = []): array|object
+    {
+        $uri = '/v2/users';
 
         $this->lastResponse = $this->sendRequest('GET', $uri, $options);
 
@@ -745,7 +1091,7 @@ class TidalApi
      * https://developer.tidal.com/apiref?spec=user-v2&ref=get-me-v2
      *
      * @param  array  $options  Optional. Options for the user.
-     * @return array|object The currently authenticated user. Type is controlled by the `return_assoc` option.
+     * @return array|object The currently authenticated user's details. Type is controlled by the `return_assoc` option.
      *
      * @throws TidalApiAuthException
      * @throws TidalApiException
@@ -760,19 +1106,39 @@ class TidalApi
     }
 
     /**
-     * Get a user.
+     * Get a user by id.
      * https://developer.tidal.com/apiref?spec=user-v2&ref=get-user-v2
      *
-     * @param  string  $userId  Id of the video.
-     * @param  array|object  $options  Optional. Options for the user.
-     * @return array|object The requested user. Type is controlled by the `return_assoc` option.
+     * @param  string  $userId  Id of the user.
+     * @param  array  $options  Optional. Options for the user.
+     * @return array|object The requested user's details. Type is controlled by the `return_assoc` option.
      *
      * @throws TidalApiException
      * @throws TidalApiAuthException
      */
-    public function getUser(string $userId, array|object $options = []): array|object
+    public function getUser(string $userId, array $options = []): array|object
     {
         $uri = '/v2/users/' . $userId;
+
+        $this->lastResponse = $this->sendRequest('GET', $uri, $options);
+
+        return $this->lastResponse['body'];
+    }
+
+    /**
+     * Get a user relationship.
+     *
+     * @param  string  $userId  Id of the user.
+     * @param  string  $relationship  Relationship to return.
+     * @param  array  $options  Optional. Options for the user.
+     * @return array|object The requested user relationship. Type is controlled by the `return_assoc` option.
+     *
+     * @throws TidalApiException
+     * @throws TidalApiAuthException
+     */
+    public function getUserRelationship(string $userId, string $relationship, array $options = []): array|object
+    {
+        $uri = '/v2/users/' . $userId . '/relationships/' . $relationship;
 
         $this->lastResponse = $this->sendRequest('GET', $uri, $options);
 
@@ -784,35 +1150,15 @@ class TidalApi
      * https://developer.tidal.com/apiref?spec=user-v2&ref=get-user-userentitlements-v2
      *
      * @param  string  $userId  Id of the user.
-     * @param  array|object  $options  Optional. Options for the video.
-     * @return array|object The users entitlements relationship. Type is controlled by the `return_assoc` option.
+     * @param  array  $options  Optional. Options for the video.
+     * @return array|object The requested users entitlements relationship. Type is controlled by the `return_assoc` option.
      *
      * @throws TidalApiException
      * @throws TidalApiAuthException
      */
-    public function getUserRelationshipEntitlements(string $userId, array|object $options = []): array|object
+    public function getUserRelationshipEntitlements(string $userId, array $options = []): array|object
     {
         return $this->getUserRelationship($userId, 'entitlements', $options);
-    }
-
-    /**
-     * Get a user relationship.
-     *
-     * @param  string  $userId  Id of the user.
-     * @param  string  $relationship  Relationship to return.
-     * @param  array|object  $options  Optional. Options for the user.
-     * @return array|object The requested user relationship. Type is controlled by the `return_assoc` option.
-     *
-     * @throws TidalApiException
-     * @throws TidalApiAuthException
-     */
-    public function getUserRelationship(string $userId, string $relationship, array|object $options = []): array|object
-    {
-        $uri = '/v2/users/' . $userId . '/relationships/' . $relationship;
-
-        $this->lastResponse = $this->sendRequest('GET', $uri, $options);
-
-        return $this->lastResponse['body'];
     }
 
     /**
@@ -821,8 +1167,8 @@ class TidalApi
      *
      * @param  string  $userId  Id of the user.
      * @param  string  $locale  The locale.
-     * @param  array|object  $options  Optional. Options for the video.
-     * @return array|object The users public profile relationship. Type is controlled by the `return_assoc` option.
+     * @param  array  $options  Optional. Options for the video.
+     * @return array|object The requested users public profile relationship. Type is controlled by the `return_assoc` option.
      *
      * @throws TidalApiException
      * @throws TidalApiAuthException
@@ -830,11 +1176,11 @@ class TidalApi
     public function getUserRelationshipPublicProfile(
         string $userId,
         string $locale,
-        array|object $options = [],
+        array $options = [],
     ): array|object {
         $options = array_merge([
             'locale' => $locale,
-        ], (array) $options);
+        ], $options);
 
         return $this->getUserRelationship($userId, 'publicProfile', $options);
     }
@@ -844,23 +1190,189 @@ class TidalApi
      * https://developer.tidal.com/apiref?spec=user-v2&ref=get-user-userrecommendations-v2
      *
      * @param  string  $userId  Id of the user.
-     * @param  array|object  $options  Optional. Options for the video.
-     * @return array|object The users recommendations relationship. Type is controlled by the `return_assoc` option.
+     * @param  array  $options  Optional. Options for the user.
+     * @return array|object The requested users recommendations relationship. Type is controlled by the `return_assoc` option.
      *
      * @throws TidalApiException
      * @throws TidalApiAuthException
      */
-    public function getUserRelationshipRecommendations(string $userId, array|object $options = []): array|object
+    public function getUserRelationshipRecommendations(string $userId, array $options = []): array|object
     {
         return $this->getUserRelationship($userId, 'recommendations', $options);
     }
 
     /**
+     * Get the currently authenticated user's entitlements.
+     * https://developer.tidal.com/apiref?spec=user-v2&ref=get-myuserentitlement-v2
+     *
+     * @param  array  $options  Optional. Options for the user.
+     * @return array|object The currently authenticated users entitlements. Type is controlled by the `return_assoc` option.
+     *
+     * @throws TidalApiException
+     * @throws TidalApiAuthException
+     */
+    public function getMyEntitlements(array $options = []): array|object
+    {
+        $uri = '/v2/userEntitlements/me';
+
+        $this->lastResponse = $this->sendRequest('GET', $uri, $options);
+
+        return $this->lastResponse['body'];
+    }
+
+    /**
+     * Get a user's entitlements.
+     * https://developer.tidal.com/apiref?spec=user-v2&ref=get-userentitlement-v2
+     *
+     * @param  string  $userId  Id of the user.
+     * @param  array  $options  Optional. Options for the user.
+     * @return array|object The requested users entitlements. Type is controlled by the `return_assoc` option.
+     *
+     * @throws TidalApiException
+     * @throws TidalApiAuthException
+     */
+    public function getUserEntitlements(string $userId, array $options = []): array|object
+    {
+        $uri = '/v2/userEntitlements/' . $userId;
+
+        $this->lastResponse = $this->sendRequest('GET', $uri, $options);
+
+        return $this->lastResponse['body'];
+    }
+
+    /**
+     * Get a user's user recommendations in batch.
+     * https://developer.tidal.com/apiref?spec=user-v2&ref=get-userrecommendations-batch-v2
+     *
+     * @param  array  $options  Optional. Options for the user.
+     * @return array|object The requested users recommendations in batch. Type is controlled by the `return_assoc` option.
+     *
+     * @throws TidalApiException
+     * @throws TidalApiAuthException
+     */
+    public function getUserRecommendationsBatch(array $options = []): array|object
+    {
+        $uri = '/v2/userRecommendations/';
+
+        $this->lastResponse = $this->sendRequest('GET', $uri, $options);
+
+        return $this->lastResponse['body'];
+    }
+
+    /**
+     * Get the currently authenticated users recommendations.
+     * https://developer.tidal.com/apiref?spec=user-v2&ref=get-myrecommendations-v2
+     *
+     * @param  array  $options  Optional. Options for the user.
+     * @return array|object The currently authenticated users recommendations. Type is controlled by the `return_assoc` option.
+     *
+     * @throws TidalApiException
+     * @throws TidalApiAuthException
+     */
+    public function getMyRecommendations(array $options = []): array|object
+    {
+        $uri = '/v2/userRecommendations/me';
+
+        $this->lastResponse = $this->sendRequest('GET', $uri, $options);
+
+        return $this->lastResponse['body'];
+    }
+
+    /**
+     * Get a user's user recommendations.
+     * https://developer.tidal.com/apiref?spec=user-v2&ref=get-userrecommendations-batch-v2
+     *
+     *
+     * @param  string  $userId  Id of the user.
+     * @param  array  $options  Optional. Options for the user.
+     * @return array|object The requested users user recommendations. Type is controlled by the `return_assoc` option.
+     *
+     * @throws TidalApiException
+     * @throws TidalApiAuthException
+     */
+    public function getUserRecommendations(string $userId, array $options = []): array|object
+    {
+        $uri = '/v2/userRecommendations/' . $userId;
+
+        $this->lastResponse = $this->sendRequest('GET', $uri, $options);
+
+        return $this->lastResponse['body'];
+    }
+
+    /**
+     * Get a userRecommendations relationship.
+     *
+     * @param  string  $userId  Id of the user.
+     * @param  string  $relationship  Relationship to return.
+     * @param  array  $options  Optional. Options for the user.
+     * @return array|object The requested userRecommendations relationship. Type is controlled by the `return_assoc` option.
+     *
+     * @throws TidalApiException
+     * @throws TidalApiAuthException
+     */
+    public function getUserRecommendationRelationship(string $userId, string $relationship, array $options = []): array|object
+    {
+        $uri = '/v2/userRecommendations/' . $userId . '/relationships/' . $relationship;
+
+        $this->lastResponse = $this->sendRequest('GET', $uri, $options);
+
+        return $this->lastResponse['body'];
+    }
+
+    /**
+     * Get a userRecommendation discoveryMixes relationship.
+     * https://developer.tidal.com/apiref?spec=user-v2&ref=get-userrecommendations-discoverymixes-v2
+     *
+     * @param  string  $userId  Id of the user.
+     * @param  array  $options  Optional. Options for the user.
+     * @return array|object The requested userRecommendation discoveryMixes relationship. Type is controlled by the `return_assoc` option.
+     *
+     * @throws TidalApiException
+     * @throws TidalApiAuthException
+     */
+    public function getUserRecommendationRelationshipDiscoveryMixes(string $userId, array $options = []): array|object
+    {
+        return $this->getUserRecommendationRelationship($userId, 'discoveryMixes', $options);
+    }
+
+    /**
+     * Get a userRecommendation myMixes relationship.
+     * https://developer.tidal.com/apiref?spec=user-v2&ref=get-userrecommendations-mymixes-v2
+     *
+     * @param  string  $userId  Id of the user.
+     * @param  array  $options  Optional. Options for the user.
+     * @return array|object The requested userRecommendation myMixes relationship. Type is controlled by the `return_assoc` option.
+     *
+     * @throws TidalApiException
+     * @throws TidalApiAuthException
+     */
+    public function getUserRecommendationRelationshipMyMixes(string $userId, array $options = []): array|object
+    {
+        return $this->getUserRecommendationRelationship($userId, 'myMixes', $options);
+    }
+
+    /**
+     * Get a userRecommendation newArrivalMixes relationship.
+     * https://developer.tidal.com/apiref?spec=user-v2&ref=get-userrecommendations-newarrivalmixes-v2
+     *
+     * @param  string  $userId  Id of the user.
+     * @param  array  $options  Optional. Options for the user.
+     * @return array|object The requested userRecommendation newArrivalMixes relationship. Type is controlled by the `return_assoc` option.
+     *
+     * @throws TidalApiException
+     * @throws TidalApiAuthException
+     */
+    public function getUserRecommendationRelationshipNewArrivalMixes(string $userId, array $options = []): array|object
+    {
+        return $this->getUserRecommendationRelationship($userId, 'newArrivalMixes', $options);
+    }
+
+    /**
      * Get the currently authenticated users playlists.
-     * https://developer.tidal.com/apiref?spec=user-v2&ref=get-user-userrecommendations-v2
+     * https://developer.tidal.com/apiref?spec=user-playlist-v2&ref=get-my-playlists-v2
      *
      * @param  array  $options  Optional. Options for the users playlists.
-     * @return array|object The currently authenticated users playlist. Type is controlled by the `return_assoc` option.
+     * @return array|object The currently authenticated users playlists. Type is controlled by the `return_assoc` option.
      *
      * @throws TidalApiAuthException
      * @throws TidalApiException

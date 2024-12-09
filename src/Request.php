@@ -6,11 +6,11 @@ namespace TidalApi;
 
 class Request
 {
-    public const  LOGIN_URL = 'https://login.tidal.com';
+    public const LOGIN_URL = 'https://login.tidal.com';
 
-    public const  AUTH_URL = 'https://auth.tidal.com';
+    public const AUTH_URL = 'https://auth.tidal.com';
 
-    public const  API_URL = 'https://openapi.tidal.com';
+    public const API_URL = 'https://openapi.tidal.com';
 
     protected array $lastResponse = [];
 
