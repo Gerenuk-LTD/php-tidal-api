@@ -101,7 +101,7 @@ if ($state !== $storedState) {
     die('State mismatch');
 }
 
-// Request an access token using the code from Spotify and the previously created code verifier.
+// Request an access token using the code from Tidal and the previously created code verifier.
 $session->requestAccessToken($_GET['code'], $verifier);
 
 $accessToken = $session->getAccessToken();
