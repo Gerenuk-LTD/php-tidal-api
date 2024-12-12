@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace TidalApi;
 
+use Random\RandomException;
+
 class Session
 {
     protected string $accessToken = '';
@@ -47,8 +49,11 @@ class Session
     /**
      * Generate a code challenge from a code verifier for use with the PKCE flow.
      *
+     * @api
+     *
      * @param  string  $codeVerifier  The code verifier to create a challenge from.
      * @param  string  $hashAlgo  Optional. The hash algorithm to use. Defaults to "sha256".
+     *
      * @return string The code challenge.
      */
     public function generateCodeChallenge(string $codeVerifier, string $hashAlgo = 'sha256'): string
@@ -64,7 +69,10 @@ class Session
     /**
      * Generate a code verifier for use with the PKCE flow.
      *
+     * @api
+     *
      * @param  int  $length  Optional. Code verifier length. Must be between 43 and 128 characters long, default is 128.
+     *
      * @return string A code verifier string.
      */
     public function generateCodeVerifier(int $length = 128): string
@@ -75,8 +83,13 @@ class Session
     /**
      * Generate a random state value.
      *
+     * @api
+     *
      * @param  int  $length  Optional. Length of the state. Default is 16 characters.
+     *
      * @return string A random state value.
+     *
+     * @throws RandomException
      */
     public function generateState(int $length = 16): string
     {
@@ -89,10 +102,13 @@ class Session
     /**
      * Get the authorization URL.
      *
+     * @api
+     *
      * @param  array|object  $options  Optional. Options for the authorization URL.
      *                                 - string code_challenge. A PKCE code challenge.
      *                                 - array scope Optional. Scope(s) to request from the user.
      *                                 - string state Optional. A CSRF token.
+     *
      * @return string The authorization URL.
      */
     public function getAuthorizeUrl(array|object $options = []): string
@@ -115,6 +131,8 @@ class Session
     /**
      * Get the client ID.
      *
+     * @api
+     *
      * @return string The client ID.
      */
     public function getClientId(): string
@@ -124,6 +142,8 @@ class Session
 
     /**
      * Set the client ID.
+     *
+     * @api
      *
      * @param  string  $clientId  The client ID.
      */
@@ -137,6 +157,8 @@ class Session
     /**
      * Get the client's redirect URI.
      *
+     * @api
+     *
      * @return string The redirect URI.
      */
     public function getRedirectUri(): string
@@ -146,6 +168,8 @@ class Session
 
     /**
      * Set the client's redirect URI.
+     *
+     * @api
      *
      * @param  string  $redirectUri  The redirect URI.
      */
@@ -159,6 +183,8 @@ class Session
     /**
      * Get the access token.
      *
+     * @api
+     *
      * @return string The access token.
      */
     public function getAccessToken(): string
@@ -168,6 +194,8 @@ class Session
 
     /**
      * Set the access token.
+     *
+     * @api
      *
      * @param  string  $accessToken  The access token
      */
@@ -181,6 +209,8 @@ class Session
     /**
      * Get the access token expiration time.
      *
+     * @api
+     *
      * @return int A Unix timestamp indicating the token expiration time.
      */
     public function getTokenExpiration(): int
@@ -190,6 +220,8 @@ class Session
 
     /**
      * Get the refresh token.
+     *
+     * @api
      *
      * @return string The refresh token.
      */
@@ -201,6 +233,8 @@ class Session
     /**
      * Set the session's refresh token.
      *
+     * @api
+     *
      * @param  string  $refreshToken  The refresh token.
      */
     public function setRefreshToken(string $refreshToken): self
@@ -211,9 +245,11 @@ class Session
     }
 
     /**
-     * Get the scope for the current access token
+     * Get the scope for the current access token.
      *
-     * @return array The scope for the current access token
+     * @api
+     *
+     * @return array The scope for the current access token.
      */
     public function getScope(): array
     {
@@ -222,6 +258,8 @@ class Session
 
     /**
      * Refresh an access token.
+     *
+     * @api
      *
      * @param  string|null  $refreshToken  Optional. The refresh token to use.
      * @return bool Whether the access token was successfully refreshed.
@@ -267,6 +305,8 @@ class Session
     /**
      * Get the client secret.
      *
+     * @api
+     *
      * @return string The client secret.
      */
     public function getClientSecret(): string
@@ -276,6 +316,8 @@ class Session
 
     /**
      * Set the client secret.
+     *
+     * @api
      *
      * @param  string  $clientSecret  The client secret.
      */
@@ -289,8 +331,11 @@ class Session
     /**
      * Request an access token given an authorization code.
      *
-     * @param  string  $authorizationCode  The authorization code from Spotify.
+     * @api
+     *
+     * @param  string  $authorizationCode  The authorization code from Tidal.
      * @param  string  $codeVerifier  Optional. A previously generated code verifier. Will assume a PKCE flow if passed.
+     *
      * @return bool True when the access token was successfully granted, false otherwise.
      */
     public function requestAccessToken(string $authorizationCode, string $codeVerifier = ''): bool
@@ -319,6 +364,8 @@ class Session
 
     /**
      * Request an access token using the Client Credentials Flow.
+     *
+     * @api
      *
      * @return bool True when an access token was successfully granted, false otherwise.
      */
