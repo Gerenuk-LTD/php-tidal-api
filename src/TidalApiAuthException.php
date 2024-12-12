@@ -15,6 +15,8 @@ class TidalApiAuthException extends TidalApiException
 
     /**
      * Returns whether the exception was thrown because of invalid credentials.
+     *
+     * @api
      */
     public function hasInvalidCredentials(): bool
     {
@@ -26,6 +28,8 @@ class TidalApiAuthException extends TidalApiException
 
     /**
      * Returns whether the exception was thrown because of an invalid refresh token.
+     *
+     * @api
      */
     public function hasInvalidRefreshToken(): bool
     {

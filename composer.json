@@ -34,11 +34,6 @@
       "TidalApi\\": "src/"
     }
   },
-  "autoload-dev": {
-    "psr-4": {
-      "TidalApi\\Tests": "tests/"
-    }
-  },
   "scripts": {
     "pint": "pint --config vendor/gerenuk/php-coding-style/pint.json"
   }

@@ -22,10 +22,13 @@ class Request
     /**
      * Make a request to the "login" endpoint.
      *
+     * @api
+     *
      * @param  string  $method  The HTTP method to use.
      * @param  string  $uri  The URI to request.
      * @param  string|array  $parameters  Optional. Query string parameters or HTTP body, depending on $method.
      * @param  array  $headers  Optional. HTTP headers.
+     *
      * @return array Response data.
      *               - array|object body The response body. Type is controlled by the `return_assoc` option.
      *               - array headers Response headers.
@@ -44,10 +47,13 @@ class Request
      * Make a request to Tidal.
      * You'll probably want to use one of the convenience methods instead.
      *
+     * @api
+     *
      * @param  string  $method  The HTTP method to use.
      * @param  string  $url  The URL to request.
      * @param  string|array|object  $parameters  Optional. Query string parameters or HTTP body, depending on $method.
      * @param  array  $headers  Optional. HTTP headers.
+     *
      * @return array Response data.
      *               - array|object body The response body. Type is controlled by the `return_assoc` option.
      *               - array headers Response headers.
@@ -68,7 +74,6 @@ class Request
         }
 
         $options = [
-            //            CURLOPT_CAINFO => __DIR__ . '/cacert.pem',
             CURLOPT_ENCODING => '',
             CURLOPT_HEADER => true,
             CURLOPT_HTTPHEADER => [],
@@ -143,6 +148,8 @@ class Request
     /**
      * Split response into headers and body, taking proxy response headers etc. into account.
      *
+     * @internal
+     *
      * @param  string  $response  The complete response.
      * @return array An array consisting of two elements, headers and body.
      */
@@ -171,6 +178,8 @@ class Request
 
     /**
      * Parse HTTP response body, taking the "return_assoc" option into account.
+     *
+     * @internal
      */
     protected function parseBody(string $body): mixed
     {
@@ -180,7 +189,10 @@ class Request
     /**
      * Parse HTTP response headers and normalize names.
      *
+     * @internal
+     *
      * @param  string  $headers  The raw, unparsed response headers.
+     *
      * @return array Headers as key–value pairs.
      */
     protected function parseHeaders(string $headers): array
@@ -202,6 +214,8 @@ class Request
 
     /**
      * Handle response errors.
+     *
+     * @internal
      *
      * @param  string  $body  The raw, unparsed response body.
      * @param  int  $status  The HTTP status code, passed along to any exceptions thrown.
@@ -238,10 +252,13 @@ class Request
     /**
      * Make a request to the "auth" endpoint.
      *
+     * @api
+     *
      * @param  string  $method  The HTTP method to use.
      * @param  string  $uri  The URI to request.
      * @param  string|array  $parameters  Optional. Query string parameters or HTTP body, depending on $method.
      * @param  array  $headers  Optional. HTTP headers.
+     *
      * @return array Response data.
      *               - array|object body The response body. Type is controlled by the `return_assoc` option.
      *               - array headers Response headers.
@@ -259,10 +276,13 @@ class Request
     /**
      * Make a request to the "api" endpoint.
      *
+     * @api
+     *
      * @param  string  $method  The HTTP method to use.
      * @param  string  $uri  The URI to request.
      * @param  string|array  $parameters  Optional. Query string parameters or HTTP body, depending on $method.
      * @param  array  $headers  Optional. HTTP headers.
+     *
      * @return array Response data.
      *               - array|object body The response body. Type is controlled by the `return_assoc` option.
      *               - array headers Response headers.
@@ -280,6 +300,8 @@ class Request
     /**
      * Get the latest full response from the Tidal Api.
      *
+     * @api
+     *
      * @return array Response data.
      *               - array|object body The response body. Type is controlled by the `return_assoc` option.
      *               - array headers Response headers.
@@ -293,6 +315,8 @@ class Request
 
     /**
      * Set options
+     *
+     * @api
      *
      * @param  array|object  $options  Options to set.
      */
