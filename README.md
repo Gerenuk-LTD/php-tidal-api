@@ -7,6 +7,9 @@
 
 This is a PHP wrapper for [Tidal's API](https://developer.tidal.com/documentation). It is a modified version of [jwilsson/spotify-web-api-php](https://github.com/jwilsson/spotify-web-api-php).
 
+> [!WARNING]
+> This package currently only supports the official [Tidal's API](https://developer.tidal.com/documentation) endpoints.
+
 ## Table of Contents
 1. [Introduction](#php-tidal-api)
 2. [Version Compatability](#version-compatability)
