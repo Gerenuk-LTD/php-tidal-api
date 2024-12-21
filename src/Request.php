@@ -22,21 +22,10 @@ class Request
     /**
      * Make a request to the "login" endpoint.
      *
-     * @api
-     *
-     * @param  string  $method  The HTTP method to use.
-     * @param  string  $uri  The URI to request.
-     * @param  string|array  $parameters  Optional. Query string parameters or HTTP body, depending on $method.
-     * @param  array  $headers  Optional. HTTP headers.
-     *
-     * @return array Response data.
-     *               - array|object body The response body. Type is controlled by the `return_assoc` option.
-     *               - array headers Response headers.
-     *               - int status HTTP status code.
-     *               - string url The requested URL.
-     *
      * @throws TidalApiAuthException
      * @throws TidalApiException
+     *
+     * @api
      */
     public function login(string $method, string $uri, string|array $parameters = [], array $headers = []): array
     {
@@ -45,30 +34,16 @@ class Request
 
     /**
      * Make a request to Tidal.
-     * You'll probably want to use one of the convenience methods instead.
-     *
-     * @api
-     *
-     * @param  string  $method  The HTTP method to use.
-     * @param  string  $url  The URL to request.
-     * @param  string|array|object  $parameters  Optional. Query string parameters or HTTP body, depending on $method.
-     * @param  array  $headers  Optional. HTTP headers.
-     *
-     * @return array Response data.
-     *               - array|object body The response body. Type is controlled by the `return_assoc` option.
-     *               - array headers Response headers.
-     *               - int status HTTP status code.
-     *               - string url The requested URL.
      *
      * @throws TidalApiAuthException
      * @throws TidalApiException
      */
     public function send(string $method, string $url, string|array|object $parameters = [], array $headers = []): array
     {
-        // Reset any old responses
+        // Reset any old responses.
         $this->lastResponse = [];
 
-        // Sometimes a stringified JSON object is passed
+        // Sometimes a stringified JSON object is passed.
         if (is_array($parameters) || is_object($parameters)) {
             $parameters = http_build_query($parameters, '', '&');
         }
@@ -147,11 +122,6 @@ class Request
 
     /**
      * Split response into headers and body, taking proxy response headers etc. into account.
-     *
-     * @internal
-     *
-     * @param  string  $response  The complete response.
-     * @return array An array consisting of two elements, headers and body.
      */
     protected function splitResponse(string $response): array
     {
@@ -178,8 +148,6 @@ class Request
 
     /**
      * Parse HTTP response body, taking the "return_assoc" option into account.
-     *
-     * @internal
      */
     protected function parseBody(string $body): mixed
     {
@@ -188,12 +156,6 @@ class Request
 
     /**
      * Parse HTTP response headers and normalize names.
-     *
-     * @internal
-     *
-     * @param  string  $headers  The raw, unparsed response headers.
-     *
-     * @return array Headers as key–value pairs.
      */
     protected function parseHeaders(string $headers): array
     {
@@ -215,55 +177,31 @@ class Request
     /**
      * Handle response errors.
      *
-     * @internal
-     *
-     * @param  string  $body  The raw, unparsed response body.
-     * @param  int  $status  The HTTP status code, passed along to any exceptions thrown.
-     *
      * @throws TidalApiAuthException
      * @throws TidalApiException
      */
     protected function handleResponseError(string $body, int $status): void
     {
         $parsedBody = json_decode($body);
-        $error = $parsedBody->error ?? null;
+        $error = $parsedBody->errors[0] ?? null;
 
-        if (isset($error->message) && isset($error->status)) {
-            // It's an Api call error
-            $exception = new TidalApiException($error->message, $error->status);
-
-            if (isset($error->reason)) {
-                $exception->setReason($error->reason);
-            }
-
-            throw $exception;
+        if (isset($error->code) && isset($error->detail)) {
+            // It's an Api call error.
+            throw new TidalApiException($error->detail, $error->code);
         } elseif (isset($parsedBody->error_description)) {
-            // It's an auth call error
+            // It's an auth call error.
             throw new TidalApiAuthException($parsedBody->error_description, $status);
         } elseif ($body) {
-            // Something else went wrong, try to give at least some info
+            // Something else went wrong, try to give at least some info.
             throw new TidalApiException($body, $status);
         } else {
-            // Something went really wrong, we don't know what
+            // Something went really wrong, we don't know what.
             throw new TidalApiException('An unknown error occurred.', $status);
         }
     }
 
     /**
      * Make a request to the "auth" endpoint.
-     *
-     * @api
-     *
-     * @param  string  $method  The HTTP method to use.
-     * @param  string  $uri  The URI to request.
-     * @param  string|array  $parameters  Optional. Query string parameters or HTTP body, depending on $method.
-     * @param  array  $headers  Optional. HTTP headers.
-     *
-     * @return array Response data.
-     *               - array|object body The response body. Type is controlled by the `return_assoc` option.
-     *               - array headers Response headers.
-     *               - int status HTTP status code.
-     *               - string url The requested URL.
      *
      * @throws TidalApiAuthException
      * @throws TidalApiException
@@ -276,19 +214,6 @@ class Request
     /**
      * Make a request to the "api" endpoint.
      *
-     * @api
-     *
-     * @param  string  $method  The HTTP method to use.
-     * @param  string  $uri  The URI to request.
-     * @param  string|array  $parameters  Optional. Query string parameters or HTTP body, depending on $method.
-     * @param  array  $headers  Optional. HTTP headers.
-     *
-     * @return array Response data.
-     *               - array|object body The response body. Type is controlled by the `return_assoc` option.
-     *               - array headers Response headers.
-     *               - int status HTTP status code.
-     *               - string url The requested URL.
-     *
      * @throws TidalApiAuthException
      * @throws TidalApiException
      */
@@ -299,14 +224,6 @@ class Request
 
     /**
      * Get the latest full response from the Tidal Api.
-     *
-     * @api
-     *
-     * @return array Response data.
-     *               - array|object body The response body. Type is controlled by the `return_assoc` option.
-     *               - array headers Response headers.
-     *               - int status HTTP status code.
-     *               - string url The requested URL.
      */
     public function getLastResponse(): array
     {
@@ -314,11 +231,9 @@ class Request
     }
 
     /**
-     * Set options
+     * Set options.
      *
-     * @api
-     *
-     * @param  array|object  $options  Options to set.
+     * @return $this
      */
     public function setOptions(array|object $options): self
     {

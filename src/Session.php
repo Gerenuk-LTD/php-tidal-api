@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace TidalApi;
 
-use Random\RandomException;
-
 class Session
 {
     protected string $accessToken = '';
@@ -25,13 +23,7 @@ class Session
     protected ?Request $request = null;
 
     /**
-     * Constructor
      * Set up client credentials.
-     *
-     * @param  string  $clientId  The client ID.
-     * @param  string  $clientSecret  Optional. The client secret.
-     * @param  string  $redirectUri  Optional. The redirect URI.
-     * @param  ?Request  $request  Optional. The Request object to use.
      */
     public function __construct(
         string $clientId,
@@ -49,31 +41,24 @@ class Session
     /**
      * Generate a code challenge from a code verifier for use with the PKCE flow.
      *
+     *
      * @api
-     *
-     * @param  string  $codeVerifier  The code verifier to create a challenge from.
-     * @param  string  $hashAlgo  Optional. The hash algorithm to use. Defaults to "sha256".
-     *
-     * @return string The code challenge.
      */
     public function generateCodeChallenge(string $codeVerifier, string $hashAlgo = 'sha256'): string
     {
         $challenge = hash($hashAlgo, $codeVerifier, true);
         $challenge = base64_encode($challenge);
         $challenge = strtr($challenge, '+/', '-_');
-        $challenge = rtrim($challenge, '=');
 
-        return $challenge;
+        return rtrim($challenge, '=');
     }
 
     /**
      * Generate a code verifier for use with the PKCE flow.
      *
+     * @throws \Random\RandomException
+     *
      * @api
-     *
-     * @param  int  $length  Optional. Code verifier length. Must be between 43 and 128 characters long, default is 128.
-     *
-     * @return string A code verifier string.
      */
     public function generateCodeVerifier(int $length = 128): string
     {
@@ -83,13 +68,7 @@ class Session
     /**
      * Generate a random state value.
      *
-     * @api
-     *
-     * @param  int  $length  Optional. Length of the state. Default is 16 characters.
-     *
-     * @return string A random state value.
-     *
-     * @throws RandomException
+     * @throws \Random\RandomException
      */
     public function generateState(int $length = 16): string
     {
@@ -102,14 +81,8 @@ class Session
     /**
      * Get the authorization URL.
      *
+     *
      * @api
-     *
-     * @param  array|object  $options  Optional. Options for the authorization URL.
-     *                                 - string code_challenge. A PKCE code challenge.
-     *                                 - array scope Optional. Scope(s) to request from the user.
-     *                                 - string state Optional. A CSRF token.
-     *
-     * @return string The authorization URL.
      */
     public function getAuthorizeUrl(array|object $options = []): string
     {
@@ -130,10 +103,6 @@ class Session
 
     /**
      * Get the client ID.
-     *
-     * @api
-     *
-     * @return string The client ID.
      */
     public function getClientId(): string
     {
@@ -143,9 +112,7 @@ class Session
     /**
      * Set the client ID.
      *
-     * @api
-     *
-     * @param  string  $clientId  The client ID.
+     * @return $this
      */
     public function setClientId(string $clientId): self
     {
@@ -156,10 +123,6 @@ class Session
 
     /**
      * Get the client's redirect URI.
-     *
-     * @api
-     *
-     * @return string The redirect URI.
      */
     public function getRedirectUri(): string
     {
@@ -169,9 +132,7 @@ class Session
     /**
      * Set the client's redirect URI.
      *
-     * @api
-     *
-     * @param  string  $redirectUri  The redirect URI.
+     * @return $this
      */
     public function setRedirectUri(string $redirectUri): self
     {
@@ -182,10 +143,6 @@ class Session
 
     /**
      * Get the access token.
-     *
-     * @api
-     *
-     * @return string The access token.
      */
     public function getAccessToken(): string
     {
@@ -195,9 +152,9 @@ class Session
     /**
      * Set the access token.
      *
-     * @api
+     * @return $this
      *
-     * @param  string  $accessToken  The access token
+     * @api
      */
     public function setAccessToken(string $accessToken): self
     {
@@ -209,9 +166,8 @@ class Session
     /**
      * Get the access token expiration time.
      *
-     * @api
      *
-     * @return int A Unix timestamp indicating the token expiration time.
+     * @api
      */
     public function getTokenExpiration(): int
     {
@@ -221,9 +177,8 @@ class Session
     /**
      * Get the refresh token.
      *
-     * @api
      *
-     * @return string The refresh token.
+     * @api
      */
     public function getRefreshToken(): string
     {
@@ -233,9 +188,9 @@ class Session
     /**
      * Set the session's refresh token.
      *
-     * @api
+     * @return $this
      *
-     * @param  string  $refreshToken  The refresh token.
+     * @api
      */
     public function setRefreshToken(string $refreshToken): self
     {
@@ -247,9 +202,8 @@ class Session
     /**
      * Get the scope for the current access token.
      *
-     * @api
      *
-     * @return array The scope for the current access token.
+     * @api
      */
     public function getScope(): array
     {
@@ -258,11 +212,6 @@ class Session
 
     /**
      * Refresh an access token.
-     *
-     * @api
-     *
-     * @param  string|null  $refreshToken  Optional. The refresh token to use.
-     * @return bool Whether the access token was successfully refreshed.
      *
      * @throws TidalApiAuthException
      * @throws TidalApiException
@@ -285,29 +234,25 @@ class Session
 
         ['body' => $response] = $this->request->auth('POST', '/v1/oauth2/token', $parameters, $headers);
 
-        if (isset($response->access_token)) {
-            $this->accessToken = $response->access_token;
-            $this->expirationTime = time() + $response->expires_in;
-            $this->scope = $response->scope ?? $this->scope;
-
-            if (isset($response->refresh_token)) {
-                $this->refreshToken = $response->refresh_token;
-            } elseif (empty($this->refreshToken)) {
-                $this->refreshToken = $refreshToken;
-            }
-
-            return true;
+        if (! isset($response->access_token)) {
+            return false;
         }
 
-        return false;
+        $this->accessToken = $response->access_token;
+        $this->expirationTime = time() + $response->expires_in;
+        $this->scope = $response->scope ?? $this->scope;
+
+        if (isset($response->refresh_token)) {
+            $this->refreshToken = $response->refresh_token;
+        } elseif (empty($this->refreshToken)) {
+            $this->refreshToken = $refreshToken;
+        }
+
+        return true;
     }
 
     /**
      * Get the client secret.
-     *
-     * @api
-     *
-     * @return string The client secret.
      */
     public function getClientSecret(): string
     {
@@ -317,9 +262,9 @@ class Session
     /**
      * Set the client secret.
      *
-     * @api
+     * @return $this
      *
-     * @param  string  $clientSecret  The client secret.
+     * @api
      */
     public function setClientSecret(string $clientSecret): self
     {
@@ -331,14 +276,12 @@ class Session
     /**
      * Request an access token given an authorization code.
      *
+     * @throws TidalApiAuthException
+     * @throws TidalApiException
+     *
      * @api
-     *
-     * @param  string  $authorizationCode  The authorization code from Tidal.
-     * @param  string  $codeVerifier  Optional. A previously generated code verifier. Will assume a PKCE flow if passed.
-     *
-     * @return bool True when the access token was successfully granted, false otherwise.
      */
-    public function requestAccessToken(string $authorizationCode, string $codeVerifier = ''): bool
+    public function requestAccessToken(string $authorizationCode, string $codeVerifier): bool
     {
         $parameters = [
             'client_id' => $this->getClientId(),
@@ -348,26 +291,27 @@ class Session
             'code_verifier' => $codeVerifier,
         ];
 
-        ['body' => $response] = $this->request->auth('POST', '/v1/oauth2/token', $parameters, []);
+        ['body' => $response] = $this->request->auth('POST', '/v1/oauth2/token', $parameters);
 
-        if (isset($response->refresh_token) && isset($response->access_token)) {
-            $this->refreshToken = $response->refresh_token;
-            $this->accessToken = $response->access_token;
-            $this->expirationTime = time() + $response->expires_in;
-            $this->scope = $response->scope ?? $this->scope;
-
-            return true;
+        if (! isset($response->refresh_token) && ! isset($response->access_token)) {
+            return false;
         }
 
-        return false;
+        $this->refreshToken = $response->refresh_token;
+        $this->accessToken = $response->access_token;
+        $this->expirationTime = time() + $response->expires_in;
+        $this->scope = $response->scope ?? $this->scope;
+
+        return true;
     }
 
     /**
      * Request an access token using the Client Credentials Flow.
      *
-     * @api
+     * @throws TidalApiAuthException
+     * @throws TidalApiException
      *
-     * @return bool True when an access token was successfully granted, false otherwise.
+     * @api
      */
     public function requestCredentialsToken(): bool
     {
@@ -383,14 +327,14 @@ class Session
 
         ['body' => $response] = $this->request->auth('POST', '/v1/oauth2/token', $parameters, $headers);
 
-        if (isset($response->access_token)) {
-            $this->accessToken = $response->access_token;
-            $this->expirationTime = time() + $response->expires_in;
-            $this->scope = $response->scope ?? $this->scope;
-
-            return true;
+        if (! isset($response->access_token)) {
+            return false;
         }
 
-        return false;
+        $this->accessToken = $response->access_token;
+        $this->expirationTime = time() + $response->expires_in;
+        $this->scope = $response->scope ?? $this->scope;
+
+        return true;
     }
 }

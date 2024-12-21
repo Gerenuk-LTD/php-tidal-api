@@ -36,6 +36,6 @@
     }
   },
   "scripts": {
-    "pint": "pint --config vendor/gerenuk/php-coding-style/pint.json"
+    "format": "pint --config vendor/gerenuk/php-coding-style/pint.json"
   }
 }

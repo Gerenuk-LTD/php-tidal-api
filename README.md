@@ -1,14 +1,12 @@
 # PHP Tidal API
 
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/gerenuk/php-tidal-api.svg?style=flat-square)](https://packagist.org/packages/gerenuk/php-tidal-api)
-[![GitHub Tests Action Status](https://img.shields.io/github/actions/workflow/status/gerenuk-ltd/php-tidal-api/run-tests.yml?branch=main&label=tests&style=flat-square)](https://github.com/gerenuk-ltd/php-tidal-api/actions?query=workflow%3Arun-tests+branch%3Amain)
-[![GitHub Code Style Action Status](https://img.shields.io/github/actions/workflow/status/gerenuk-ltd/php-tidal-api/fix-php-code-styling.yml?branch=main&label=code%20style&style=flat-square)](https://github.com/gerenuk-ltd/php-tidal-api/actions?query=workflow%3A"Fix+PHP+code+styling"+branch%3Amain)
 [![Total Downloads](https://img.shields.io/packagist/dt/gerenuk/php-tidal-api.svg?style=flat-square)](https://packagist.org/packages/gerenuk/php-tidal-api)
 
 This is a PHP wrapper for [Tidal's API](https://developer.tidal.com/documentation). It is a modified version of [jwilsson/spotify-web-api-php](https://github.com/jwilsson/spotify-web-api-php).
 
 > [!WARNING]
-> This package currently only supports the official [Tidal's API](https://developer.tidal.com/documentation) endpoints.
+> This package currently only supports the official [Tidal API](https://developer.tidal.com/documentation) endpoints.
 
 ## Table of Contents
 1. [Introduction](#php-tidal-api)

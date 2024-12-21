@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace TidalApi;
 
-// Extends from SpotifyWebApiException for backwards compatibility
 class TidalApiAuthException extends TidalApiException
 {
     public const INVALID_CLIENT = 'Invalid client';
@@ -15,6 +14,7 @@ class TidalApiAuthException extends TidalApiException
 
     /**
      * Returns whether the exception was thrown because of invalid credentials.
+     *
      *
      * @api
      */

@@ -8,7 +8,7 @@ use Exception;
 
 class TidalApiException extends Exception
 {
-    public const TOKEN_EXPIRED = 'The access token expired';
+    public const TOKEN_EXPIRED = 'Not valid token: expired, please refresh';
 
     public const RATE_LIMIT_STATUS = 429;
 
@@ -19,6 +19,9 @@ class TidalApiException extends Exception
 
     /**
      * Returns the reason string from a player request's error object.
+     *
+     *
+     * @api
      */
     public function getReason(): string
     {
@@ -27,6 +30,9 @@ class TidalApiException extends Exception
 
     /**
      * Set the reason string.
+     *
+     *
+     * @api
      */
     public function setReason(string $reason): void
     {
