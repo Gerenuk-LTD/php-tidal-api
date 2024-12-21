@@ -1373,7 +1373,7 @@ class TidalApi
             'name' => $playlistName,
         ], $options);
 
-        return $this->request->send('POST', Request::UNOFFICIAL_API_URL . $uri, $options);
+        return $this->request->send('POST', Request::UNOFFICIAL_API_URL . $uri, $options, $this->authHeaders());
     }
 
     /**
@@ -1388,6 +1388,6 @@ class TidalApi
     {
         $uri = '/v2/home/feed/static';
 
-        return $this->request->send('GET', Request::UNOFFICIAL_API_URL . $uri, $options);
+        return $this->request->send('GET', Request::UNOFFICIAL_API_URL . $uri, $options, $this->authHeaders());
     }
 }
