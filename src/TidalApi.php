@@ -32,6 +32,16 @@ class TidalApi
     }
 
     /**
+     * Convert an array to a comma-separated string. If it's already a string, do nothing.
+     *
+     * @internal
+     */
+    protected function toCommaString(string|array $value): string
+    {
+        return is_array($value) ? implode(',', $value) : $value;
+    }
+
+    /**
      * Set the options for the request.
      *
      * @return $this
@@ -1346,10 +1356,38 @@ class TidalApi
     }
 
     /**
-     * Convert an array to a comma-separated string. If it's already a string, do nothing.
+     * Create a playlist.
+     *
+     * @throws TidalApiAuthException
+     * @throws TidalApiException
+     *
+     * @api
      */
-    protected function toCommaString(string|array $value): string
+    public function createPlaylist(string $playlistName, bool $isPublic = false, array $options = []): array|object
     {
-        return is_array($value) ? implode(',', $value) : $value;
+        $uri = '/v2/my-collection/playlists/folders/create-playlist';
+
+        $options = array_merge([
+            'folderId' => 'root',
+            'isPublic' => $isPublic,
+            'name' => $playlistName,
+        ], $options);
+
+        return $this->request->send('POST', Request::UNOFFICIAL_API_URL . $uri, $options);
+    }
+
+    /**
+     * Get the currently authenticated users feed.
+     *
+     * @throws TidalApiAuthException
+     * @throws TidalApiException
+     *
+     * @api
+     */
+    public function getMyFeed(array $options = []): array|object
+    {
+        $uri = '/v2/home/feed/static';
+
+        return $this->request->send('GET', Request::UNOFFICIAL_API_URL . $uri, $options);
     }
 }

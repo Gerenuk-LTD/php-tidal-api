@@ -10,6 +10,8 @@ class Request
 
     public const AUTH_URL = 'https://auth.tidal.com';
 
+    public const UNOFFICIAL_API_URL = "https://api.tidal.com";
+
     public const API_URL = 'https://openapi.tidal.com';
 
     protected array $lastResponse = [];
@@ -214,6 +216,11 @@ class Request
     /**
      * Make a request to the "api" endpoint.
      *
+     * @param  string  $method
+     * @param  string  $uri
+     * @param  string|array  $parameters
+     * @param  array  $headers
+     * @return array
      * @throws TidalApiAuthException
      * @throws TidalApiException
      */
