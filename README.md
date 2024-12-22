@@ -30,6 +30,7 @@ This is a PHP wrapper for [Tidal's API](https://developer.tidal.com/documentatio
 
 * PHP 8.0 or later.
 * PHP [cURL extension](http://php.net/manual/en/book.curl.php) (Usually included with PHP).
+* A Tidal app created via [Tidal's developer website](https://developer.tidal.com/dashboard).
 
 ## Installation
 
@@ -90,7 +91,6 @@ require 'vendor/autoload.php';
 $session = new TidalApi\Session(
     'CLIENT_ID',
     'CLIENT_SECRET',
-    'REDIRECT_URI'
 );
 
 $state = $_GET['state'];
